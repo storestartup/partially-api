@@ -1,0 +1,550 @@
+# Payment Plans
+
+## Create a new payment plan
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan"
+  -H "Authorization: Bearer your_api_key" \
+  -X POST \
+  --data '{"amount": "1000", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57", "offer_id": "60aed439-473f-48e0-80ef-3a8627dd243a"}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'POST',
+  json: true,
+  body: {
+    amount: 1000,
+    customer: {
+      email: 'aaa@y.co',
+      first_name: 'Testing',
+      last_name: 'Person'
+    },
+    offer_id: '60aed439-473f-48e0-80ef-3a8627dd243a'
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "payment_schedule": {
+        "term_units": "months",
+        "term": 3,
+        "starts_date": null,
+        "starts_auto": true,
+        "repay_by_date": "2019-02-28",
+        "payment_amount": 256.25,
+        "num_payments": 3,
+        "inserted_at": "2018-11-28T17:20:46.753612",
+        "id": "8e2db276-7b45-4f1b-b479-0c25544d90c2",
+        "frequency_units": "months",
+        "frequency": 1,
+        "down_payment_amount": 256.25,
+        "description": null,
+        "contract_signed_date": null,
+        "contract_signature": null,
+        "contract_body": null,
+        "balance": 768.75,
+        "auto_process": true,
+        "amount": 1025
+    },
+    "payment_plan": {
+        "user_agent": null,
+        "subtotal": 1000,
+        "status": "checkout",
+        "number": null,
+        "meta": null,
+        "merchant_notes": null,
+        "ip_address": null,
+        "integration_id": null,
+        "integration": null,
+        "inserted_at": "2018-11-28T17:20:46.711165",
+        "id": "2ab17c1a-860d-4575-be11-dcd5bbab467d",
+        "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+        "customer": {
+            "timezone": "America/New_York",
+            "shipto_state": null,
+            "shipto_postal_code": null,
+            "shipto_name": null,
+            "shipto_country": "US",
+            "shipto_city": null,
+            "shipto_address2": null,
+            "shipto_address": null,
+            "phone": null,
+            "last_name": "Person",
+            "inserted_at": "2018-11-28T16:57:42.923471",
+            "id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+            "first_name": "Testing",
+            "email": "aaa@y.co"
+        },
+        "currency": "USD",
+        "amount_paid": 0,
+        "amount": 1025
+    },
+    "line_items": [
+        {
+            "quantity": 1,
+            "meta": null,
+            "inserted_at": "2018-11-28T17:20:46.766599",
+            "id": "f345d9da-b67f-4056-8224-f7d9599f9439",
+            "dynamic_type": "generic",
+            "dynamic": true,
+            "description": "processing fee",
+            "amount": 25
+        }
+    ],
+    "installments": [
+        {
+            "scheduled": "2018-12-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-01-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-02-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        }
+    ]
+}
+```
+
+Creates a new payment plan in *checkout* status. The payment schedule can automatically be created from an offer by sending an *offer_id* parameter, otherwise a *payment_schedule* can be specified. Likewise, either a *customer_id* for an existing customer can be specified, or a customer object can be sent and a new customer will be created, or the existing one attached.
+To open the payment plan, use the [open](#open-a-payment-plan) method after it has been created.
+
+A payment schedule will also be created and associated with the payment plan. The scheduled installments will also be generated and returned, but they will not be stored in the database until the payment plan is opened.
+
+### HTTP Request
+
+`POST /payment_plan`
+
+### Parameters
+
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+amount | decimal | yes | total amount of the payment plan
+customer_id | string | no | id of customer to associate with, required if customer not set
+customer | object | no | [customer](#customers) object to associate with, required if customer_id not set
+offer_id | string | no | id of offer to use to generate payment schedule, required if payment_schedule not set
+payment_schedule | object | no | [payment schedule](#payment-schedules) parameters, required if offer_id not set
+meta | object | no | any custom meta data. May also set line_items key to an array of `line_items` (see below)
+currency | string | no | 3 letter currency code. Default to USD
+ip_address | string | no | ip address of customer
+user_agent | string | no | user agent of customer
+shipto_name | string | no | shipping address name
+shipto_address | string | no | street address
+shipto_address2 | string | no | street address line 2
+shipto_city | string | no | city
+shipto_state | string | no | 2 letter state/region/province code
+shipto_postal_code | string | no | zip/postal code
+shipto_country | string | no | 2 letter country abbreviation
+
+
+### line_items
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+name | string | yes | description of the line item
+price | decimal | yes | unit price of the line item
+quantity | integer | yes | quantity
+image | string | no | URL for an image to display in Partial.ly
+weight | decimal | no | weight of the item
+weight_units | string | no | lb, g, kg, oz
+
+## Open a payment plan
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+  -H "Authorization: Bearer your_api_key" \
+  -X POST \
+  --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT',
+  json: true,
+  body: {
+    payment_schedule: {
+      contract_signature: 'Customer Signature'
+    },
+    payment_method: {
+      type: 'card',
+      token_id: 'tok_ch'
+    }
+  }
+};
+
+request(options, function (error, response, payment_plan) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_agent": null,
+    "subtotal": 6981,
+    "status": "open",
+    "number": 142,
+    "meta": {
+        "quickbooks_invoice_number": "1045",
+        "description": "Payment Plan for invoice 1045"
+    },
+    "merchant_notes": null,
+    "ip_address": null,
+    "integration_id": "167",
+    "integration": "quickbooks",
+    "inserted_at": "2018-11-05T22:19:33.441694",
+    "id": "ef2b5088-10cc-4246-914d-1f2de7a4075c",
+    "customer_id": "b4b15b3b-281a-41be-9690-e7f51666b8ef",
+    "currency": "USD",
+    "amount_paid": 30,
+    "amount": 7330.05
+}
+```
+
+Opens a payment plan by signing the customer contract, attaching a payment method (new or existing), and processing the down payment if there is one. Only payment plans in *checkout* or *pending* status can be opened.
+
+### HTTP request
+
+`PUT /payment_plan/open/:id`
+
+*replace :id with the id of the payment plan to open*
+
+### Parameters
+
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+payment_schedule.customer_signature | string | yes | customer's signature
+payment_method.id | string | no | existing payment method id
+payment_method.type | string | no | card or bank_account, required if payment_method.id not sent
+payment_method.token_id | string | no | see [Payment Methods] for details on creating new payment methods
+payment_method.account_id | string | no |
+payment_method.public_token | string | no |
+
+## Cancel a payment plan
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+  -H "Authorization: Bearer your_api_key" \
+  -X PUT
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT'
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "message": "PaymentPlan canceled"
+}
+```
+
+Cancels an payment plan. Only payment plans in *open* status may be canceled
+
+### HTTP Request
+
+`PUT /payment_plan/cancel/:id`
+*replace :id with the id of the payment plan to cancel*
+
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+cancel_shopify | boolean | no | if this payment plan is for a Shopify order, also cancel the Shopify order
+cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify order, also restock the items from the order
+
+## Update a payment plan
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+  -H "Authorization: Bearer your_api_key" \
+  -X PUT \
+  -- data '{"merchant_notes": "Customer is very happy"}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT',
+  json: true,
+  body: {
+    merchant_notes: 'Customer is very happy'
+  }
+};
+
+request(options, function (error, response, plan) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_agent": null,
+    "subtotal": 1000,
+    "status": "open",
+    "number": 140,
+    "meta": {
+        "items": [
+            {
+                "quantity": 1,
+                "price": 900,
+                "name": "Widget",
+                "id": "widget-id"
+            },
+            {
+                "quantity": 2,
+                "price": 50,
+                "name": "Small product",
+                "id": "prod-sm"
+            }
+        ],
+        "description": "Sample api plan"
+    },
+    "merchant_notes": "Customer is very happy",
+    "ip_address": null,
+    "integration_id": null,
+    "integration": null,
+    "inserted_at": "2018-11-28T17:13:14.181300",
+    "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+    "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+    "currency": "USD",
+    "amount_paid": 256.25,
+    "amount": 1025
+}
+```
+
+Updates an existing payment plan
+
+### HTTP Request
+
+`PUT /payment_plan/:id`
+*replace :id with the id of the plan to update*
+
+### Parameters
+
+only the following properties may be updated
+
+Parameter | Type | Description
+--------- | -----------  | --------
+merchant_notes | string | general notes, not visible to customer
+payment_method_id | string | id of a payment method to use when processing payments for this plan
+shipto_name | string |
+shipto_address | string |
+shipto_address2 | string |
+shipto_city | string |
+shipto_state | string |
+shipto_postal_code | string |
+shipto_country | string |
+
+## Retrieve a payment plan
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+  -H "Authorization: Bearer your_api_key"
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'GET'
+};
+
+request(options, function (error, response, plan) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_agent": null,
+    "subtotal": 1000,
+    "status": "open",
+    "number": 140,
+    "meta": {
+        "items": [
+            {
+                "quantity": 1,
+                "price": 900,
+                "name": "Widget",
+                "id": "widget-id"
+            },
+            {
+                "quantity": 2,
+                "price": 50,
+                "name": "Small product",
+                "id": "prod-sm"
+            }
+        ],
+        "description": "Sample api plan"
+    },
+    "merchant_notes": "Customer is very happy",
+    "ip_address": null,
+    "integration_id": null,
+    "integration": null,
+    "inserted_at": "2018-11-28T17:13:14.181300",
+    "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+    "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+    "currency": "USD",
+    "amount_paid": 256.25,
+    "amount": 1025
+}
+```
+
+Retrieves an existing payment plan
+
+### HTTP Request
+
+`GET /payment_plan/:id`
+*replace :id with the id of the plan*
+
+## List all plans
+
+```shell
+curl "https://partial.ly/api/v1/payment_plan?date=2018-11-28"
+  -H "Authorization: Bearer your_api_key"
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_plan?date=2018-11-28',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "total_pages": 1,
+    "total_entries": 1,
+    "payment_plans": [
+        {
+            "user_agent": null,
+            "subtotal": 1000,
+            "status": "open",
+            "number": 140,
+            "meta": {
+                "items": [
+                    {
+                        "quantity": 1,
+                        "price": 900,
+                        "name": "Widget",
+                        "id": "widget-id"
+                    },
+                    {
+                        "quantity": 2,
+                        "price": 50,
+                        "name": "Small product",
+                        "id": "prod-sm"
+                    }
+                ],
+                "description": "Sample api plan"
+            },
+            "merchant_notes": "Customer is very happy",
+            "ip_address": null,
+            "integration_id": null,
+            "integration": null,
+            "inserted_at": "2018-11-28T17:13:14.181300",
+            "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+            "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+            "currency": "USD",
+            "amount_paid": 256.25,
+            "amount": 1025
+        }
+    ],
+    "page_size": 10,
+    "page_number": 1
+}
+```
+
+Lists all payment plans, with the optional filters listed below
+
+### HTTP Request
+
+`GET /payment_plan`
+
+### Parameters
+
+Parameter | Type | Description
+--------- | -----------  | --------
+status | string | plan status. checkout, pending, open, paid, canceled, or defaulted
+currency | string | 3 letter currency code
+date | date | plan created date. YYYY-MM-DD
+dateRange | string | plans created in a range of dates. Ex. use "2018-01-01|2018-02-01"
+customer | string | plans with the given customer id

@@ -1,239 +1,108 @@
 ---
-title: API Reference
+title: Partial.ly API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+  - shell: cURL
+  - javascript: Node
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='https:/partial.ly/merchant'>Partial.ly Merchant Portal</a>
 
 includes:
-  - errors
+  - offers
+  - offer_items
+  - customers
+  - payment_methods
+  - payment_plans
+  - payments
+  - payment_schedules
+  - installments
+  - refunds
+  - disputes
+  - webhooks
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+The Partial.ly API allows you to programmatically access the data in your Partial.ly merchant account and create payment plans and payments.
+The API is currently in beta mode, so there may be minor changes. If you have feedback we would love to hear it.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Our API follows REST principles and accepts and returns all data in [JSON](http://www.json.org/) format. POST and PUT data must be JSON encoded, and must have the `Content-Type: application/json` HTTP header.
+The base URL for all API calls is **https://partial.ly/api/v1**. Future versions of the API will have a different base URL, ensuring that we will never make breaking changes.
 
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+We also have a staging server at demo.partial.ly, so if you want to test your integration please use the base URL **https://demo.partial.ly/api/v1**. Note that you will have to register for a separate account here than your live Partial.ly account.
+
+If you have any questions you can't find the answer to here, please contact our [support](mailto:support@partial.ly).
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl "https://partial.ly/api/v1/offer"
+  -H "Authorization: Bearer your_api_key"
 ```
 
 ```javascript
-const kittn = require('kittn');
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
 
-let api = kittn.authorize('meowmeowmeow');
+var options = {
+  url: 'https://partial.ly/api/v1/offer',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Make sure to replace `your_api_key` with your API key.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+Partial.ly uses API keys to allow access to the API. You can find your API key in the [Partial.ly merchant portal](https://partial.ly/merchant) by navigating to Settings > general. If you have don't have any API key yet, click the generate key link to generate a new API key. Your API key carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+Partial.ly expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`Authorization: Bearer your_api_key`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>your_api_key</code> with your personal API key.
 </aside>
 
-# Kittens
+All API requests must be made over (HTTPS)[https://en.wikipedia.org/wiki/HTTPS]. Calls made over plain HTTP will be redirected to the corresponding HTTPS URL. API requests without authentication will also fail.
 
-## Get All Kittens
+# Pagination
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
+Most API calls to list resources can be paginated using the following parameters. Some resources will have additional parameters you can use to filter the results.
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+page | the page number to return results for
+per_page | the number of results to return per page
 
-## Delete a Specific Kitten
+All response objects will have the following properties, in addition to a property containing the array of results.
 
-```ruby
-require 'kittn'
+Name | Description
+--------- | -----------
+page_number | the current page
+page_size | the number of results per page
+total_entires | the total number of objects returned
+total_pages | the total number of pages found
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+# Errors
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+    "message": "Could not create offer",
+    "errors": [
+        "Name: can't be blank"
+    ]
 }
 ```
 
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
+Successful API calls will return HTTP status code 200. API calls that result in an error will either return HTTP status code 400 is there is a problem with the input, or 404 if a given object could not be found. The response body will be JSON object with a message key giving an overview of the issue. If there are issues with specific fields, there will also be an errors key with an array of field specific errors.
