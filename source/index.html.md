@@ -64,7 +64,7 @@ request(options, function (error, response, body) {
 
 > Make sure to replace `your_api_key` with your API key.
 
-Partial.ly uses API keys to allow access to the API. You can find your API key in the [Partial.ly merchant portal](https://partial.ly/merchant) by navigating to Settings > general. If you have don't have any API key yet, click the generate key link to generate a new API key. Your API key carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
+Partial.ly uses API keys to allow access to the API. You can find your API key in the [Partial.ly merchant portal](https://partial.ly/merchant) by navigating to Settings > general. If you have don't have any API key yet, click the generate key link to generate a new API key. Your API key carries many privileges, so be sure to keep it secure! Do not share your secret API key in publicly accessible areas such as GitHub, client-side code, and so forth.
 
 Partial.ly expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
@@ -74,7 +74,7 @@ Partial.ly expects for the API key to be included in all API requests to the ser
 You must replace <code>your_api_key</code> with your personal API key.
 </aside>
 
-All API requests must be made over (HTTPS)[https://en.wikipedia.org/wiki/HTTPS]. Calls made over plain HTTP will be redirected to the corresponding HTTPS URL. API requests without authentication will also fail.
+All API requests must be made over [HTTPS](https://en.wikipedia.org/wiki/HTTPS). Calls made over plain HTTP will be redirected to the corresponding HTTPS URL. API requests without authentication will also fail.
 
 # Pagination
 
