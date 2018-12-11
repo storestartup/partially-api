@@ -309,3 +309,169 @@ but all personally identifiable customer information will be anonymized. If the 
 `PUT /customer/gdpr_remove/:id`
 
 *replace :id with the id of the customer to to remove*
+
+## Log in with password
+
+```shell
+curl "https://partial.ly/api/v1/customer/login_password" \
+  -X POST \
+  -H "Authorization: Bearer your_api_key" \
+  --data '{"email": "aaa@y.co", "password": "test"}'
+```
+
+```javascript
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/customer/login_password',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'POST',
+  json: true,
+  body: {
+    email: 'aaa@y.co',
+    password: 'test'
+  }
+};
+
+request(options, function (error, response, cust) {
+
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "timezone": "America/New_York",
+    "shipto_state": null,
+    "shipto_postal_code": null,
+    "shipto_name": null,
+    "shipto_country": "US",
+    "shipto_city": null,
+    "shipto_address2": null,
+    "shipto_address": null,
+    "phone": null,
+    "last_name": "Person",
+    "inserted_at": "2018-11-28T16:57:42.923471",
+    "id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+    "first_name": "Testing",
+    "email": "aaa@y.co"
+}
+```
+
+Authenticate a customer with their email and password. Alternatively, customers can have a token generated and sent to their email with the [email login token](#email-login-token) method, which can then be used to login with the [login with a token](#login-with-a-token) method.
+
+`POST /customer/login_password`
+
+### Parameters
+Parameter | Type | Required
+--------- | -----------  | --------
+email |  string | yes
+password | string | yes
+
+## Email login token
+
+```shell
+curl "https://partial.ly/api/v1/customer/login_email" \
+  -X POST \
+  -H "Authorization: Bearer your_api_key" \
+  --data '{"email": "aaa@y.co"}'
+```
+
+```javascript
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/customer/login_email',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'POST',
+  json: true,
+  body: {
+    email: 'aaa@y.co'
+  }
+};
+
+request(options, function (error, response, body) {
+
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "message": "Token sent"
+}
+```
+
+Generates a token which can be used with the [login with a token](#login-with-a-token) method and emails it to the customer.
+
+`POST /customer/login_email`
+
+### Parameters
+Parameter | Type | Required
+--------- | -----------  | --------
+email |  string | yes
+
+## Login with a token
+
+```shell
+curl "https://partial.ly/api/v1/customer/login_token" \
+  -X POST \
+  -H "Authorization: Bearer your_api_key" \
+  --data '{"token": "N5E9gL"}'
+```
+
+```javascript
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/customer/login_token',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'POST',
+  json: true,
+  body: {
+    token: 'N5E9gL'
+  }
+};
+
+request(options, function (error, response, cust) {
+
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "timezone": "America/New_York",
+    "shipto_state": null,
+    "shipto_postal_code": null,
+    "shipto_name": null,
+    "shipto_country": "US",
+    "shipto_city": null,
+    "shipto_address2": null,
+    "shipto_address": null,
+    "phone": null,
+    "last_name": "Person",
+    "inserted_at": "2018-11-28T16:57:42.923471",
+    "id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+    "first_name": "Testing",
+    "email": "aaa@y.co"
+}
+```
+
+Authenticate a customer with a token generated from the [email a login token](#email-login-token) step.
+
+`POST /customer/login_token`
+
+### Parameters
+Parameter | Type | Required
+--------- | -----------  | --------
+token |  string | yes
