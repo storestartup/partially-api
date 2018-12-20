@@ -422,37 +422,174 @@ request(options, function (error, response, plan) {
 
 ```json
 {
-    "user_agent": null,
-    "subtotal": 1000,
-    "status": "open",
-    "number": 140,
-    "meta": {
-        "items": [
-            {
+    "refunds": [
+        {
+            "status": "succeeded",
+            "reason": "requested_by_customer",
+            "processor_id": "re_1DbaweEs15StTpSviCrp112t",
+            "processor": "stripe",
+            "notes": "discount",
+            "inserted_at": "2018-11-28T21:51:46.423002",
+            "id": "a0990737-9234-44fc-857b-eac7b4ef3cbf",
+            "failure_reason": null,
+            "failure_merchant_transfer_id": null,
+            "amount": 5.99
+        }
+    ],
+    "payments": [
+        {
+            "status": "paid",
+            "retry_number": 0,
+            "processor_id": "ch_1DbXklEs15StTpSvJfo02FRM",
+            "processor_destination_id": "py_E3f42E5m2H1p8b",
+            "processor": "stripe",
+            "payment_plan_id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+            "paid_at": "2018-11-28T18:27:16",
+            "message": null,
+            "inserted_at": "2018-11-28T18:27:16.896811",
+            "id": "2d1d0234-87c4-4184-a49f-02f4c0c30abe",
+            "currency": "USD",
+            "amount": 256.25
+        },
+        {
+            "status": "paid",
+            "retry_number": 0,
+            "processor_id": "ch_1DbaigEs15StTpSvhzmfGjSA",
+            "processor_destination_id": "py_E3i82Rh38K8Wg7",
+            "processor": "stripe",
+            "payment_plan_id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+            "paid_at": "2018-11-28T21:37:21",
+            "message": null,
+            "inserted_at": "2018-11-28T21:37:21.296658",
+            "id": "291221ab-b0a2-41dc-909b-1d1793bd23d8",
+            "currency": "USD",
+            "amount": 256.25
+        }
+    ],
+    "payment_schedule": {
+        "term_units": "months",
+        "term": 3,
+        "starts_date": null,
+        "starts_auto": true,
+        "repay_by_date": "2019-02-28",
+        "payment_amount": 256.25,
+        "num_payments": 3,
+        "inserted_at": "2018-11-28T17:13:14.235119",
+        "id": "1f5d9716-a041-47ef-8c57-86af22efa31c",
+        "frequency_units": "months",
+        "frequency": 1,
+        "down_payment_amount": 256.25,
+        "description": null,
+        "contract_signed_date": "2018-11-28T18:27:17",
+        "contract_signature": "Customer Signature",
+        "contract_body": "By submitting your order and authorizing...",
+        "balance": 768.75,
+        "auto_process": true,
+        "amount": 1025
+    },
+    "payment_plan": {
+        "user_agent": null,
+        "subtotal": 1000,
+        "status": "open",
+        "number": 140,
+        "meta": {
+            "items": [
+                {
+                    "quantity": 1,
+                    "price": 900,
+                    "name": "Widget",
+                    "id": "widget-id"
+                },
+                {
+                    "quantity": 2,
+                    "price": 50,
+                    "name": "Small product",
+                    "id": "prod-sm"
+                }
+            ],
+            "description": "Sample api plan"
+        },
+        "merchant_notes": "Customer is very happy",
+        "ip_address": null,
+        "integration_id": null,
+        "integration": null,
+        "inserted_at": "2018-11-28T17:13:14.181300",
+        "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
+        "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+        "currency": "USD",
+        "balance": 518.49,
+        "amount_refunded": 5.99,
+        "amount_pending": 0,
+        "amount_paid": 512.5,
+        "amount_disputed": 0,
+        "amount": 1025
+    },
+    "line_items": [
+        {
+            "quantity": 1,
+            "meta": {
                 "quantity": 1,
                 "price": 900,
                 "name": "Widget",
                 "id": "widget-id"
             },
-            {
+            "inserted_at": "2018-11-28T17:13:14.262856",
+            "id": "0da61119-ca96-410b-a1cb-ca059f2f8395",
+            "dynamic_type": "generic",
+            "dynamic": false,
+            "description": "Widget",
+            "amount": 900
+        },
+        {
+            "quantity": 2,
+            "meta": {
                 "quantity": 2,
                 "price": 50,
                 "name": "Small product",
                 "id": "prod-sm"
-            }
-        ],
-        "description": "Sample api plan"
-    },
-    "merchant_notes": "Customer is very happy",
-    "ip_address": null,
-    "integration_id": null,
-    "integration": null,
-    "inserted_at": "2018-11-28T17:13:14.181300",
-    "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
-    "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
-    "currency": "USD",
-    "amount_paid": 256.25,
-    "amount": 1025
+            },
+            "inserted_at": "2018-11-28T17:13:14.264749",
+            "id": "16aa3a67-5efb-42c4-8b3b-e59940a7423f",
+            "dynamic_type": "generic",
+            "dynamic": false,
+            "description": "Small product",
+            "amount": 50
+        },
+        {
+            "quantity": 1,
+            "meta": null,
+            "inserted_at": "2018-11-28T17:13:14.249186",
+            "id": "1b7c8912-ee07-4731-a301-503160dc3365",
+            "dynamic_type": "generic",
+            "dynamic": true,
+            "description": "processing fee",
+            "amount": 25
+        }
+    ],
+    "installments": [
+        {
+            "scheduled": "2018-12-28T18:27:16.910618",
+            "retry_number": 0,
+            "inserted_at": "2018-11-28T18:27:16.911366",
+            "id": "6a85b229-69e6-4850-8309-edf7bfc3cec1",
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-01-28T18:27:16.910618",
+            "retry_number": 0,
+            "inserted_at": "2018-11-28T18:27:16.927898",
+            "id": "0caa4d95-2252-4855-8f78-a0ecf426bf09",
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-02-28T18:27:16.910618",
+            "retry_number": 0,
+            "inserted_at": "2018-11-28T18:27:16.931100",
+            "id": "7a6c0aba-1b55-43dc-8367-d7fada4f1bfa",
+            "amount": 256.25
+        }
+    ],
+    "disputes": []
 }
 ```
 

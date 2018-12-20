@@ -134,3 +134,11 @@ frequency_max | integer | no | | the maximum payment frequency the customer can 
 ## Update a payment schedule
 
 Can only be done for active schedules of plans in *checkout* status
+
+## Get contract pdf
+
+Gets the binary pdf of the signed contract
+
+### HTTP Request
+
+`GET /payment_schedule/contract_pdf/:id`
