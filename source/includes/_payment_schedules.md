@@ -1,6 +1,109 @@
 # Payment Schedules
 
-A payment schedule represents the terms and schedule for a payment plan. A payment plan can have multiple payment schedules if the customer makes a one off payment that adjusts the current payment schedule. A payment plan only has one active payment schedule
+A payment schedule represents the terms and schedule for a payment plan. A payment plan can have multiple payment schedules if the customer makes a one off payment that adjusts the current payment schedule. A payment plan only has one active payment schedule  
+
+## Update a payment schedule
+
+```shell
+curl "https://partial.ly/api/v1/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"
+  -H "Authorization: Bearer your_api_key" \
+  -X PUT \
+  -- data '{"term": 3}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/v1/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT',
+  json: true,
+  body: {
+    term: 3
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "payment_schedule": {
+        "term_units": "months",
+        "term": 3,
+        "starts_date": null,
+        "starts_auto": true,
+        "repay_by_date": "2019-03-21",
+        "payment_amount": 256.25,
+        "num_payments": 3,
+        "inserted_at": "2018-12-21T22:01:18.623163",
+        "id": "64823d54-9d47-4cd9-9db0-b293294ca341",
+        "frequency_units": "months",
+        "frequency": 1,
+        "down_payment_amount": 256.25,
+        "description": null,
+        "contract_signed_date": null,
+        "contract_signature": null,
+        "contract_body": "By submitting your order and authorizing the charges on your card...",
+        "balance": 768.75,
+        "auto_process": true,
+        "amount": 1025
+    },
+    "installments": [
+        {
+            "scheduled": "2019-01-21T22:10:14.518787Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-02-21T22:10:14.518787Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-03-21T22:10:14.518787Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        }
+    ]
+}
+```
+
+Can only be done for active schedules of plans in *checkout* status. If customer flexibility enabled, updates either the term, frequency, or down payment, and reevaluates the payment schedule and installments.
+
+### HTTP request
+`PUT /payment_schedule/:id`
+
+### Parameters
+
+Parameter | Description
+--------- | -----------
+down_payment_amount | amount of down payment
+term | term or length of payment plan
+frequency | frequency of payments
+
+## Get contract pdf
+
+Gets the binary pdf of the signed contract
+
+### HTTP Request
+
+`GET /payment_schedule/contract_pdf/:id`
 
 ## Create a new payment schedule
 
@@ -129,16 +232,4 @@ frequency_units | string | no | months | type of units for the payment plan term
 frequency_days | array | no | | array of specific days of the month for payments, for example [1, 15] for payments on the 1st and 15th of the month
 frequency_flexible | boolean | no | false | allow the customer to choose their payment frequency within the specified range
 frequency_min | integer | no | | the minimum payment frequency the customer can choose
-frequency_max | integer | no | | the maximum payment frequency the customer can choose  
-
-## Update a payment schedule
-
-Can only be done for active schedules of plans in *checkout* status
-
-## Get contract pdf
-
-Gets the binary pdf of the signed contract
-
-### HTTP Request
-
-`GET /payment_schedule/contract_pdf/:id`
+frequency_max | integer | no | | the maximum payment frequency the customer can choose

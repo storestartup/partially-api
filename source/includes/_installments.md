@@ -104,4 +104,4 @@ request(options, function (error, response, installments) {
 ]
 ```
 
-Gets all installments for the given *payment_schedule_id*
+Gets all installments for the given *payment_schedule_id*. You can also list all upcoming installments for a customer by providing a *customer_id* parameter.

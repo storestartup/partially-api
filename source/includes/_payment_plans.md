@@ -57,7 +57,7 @@ request(options, function (error, response, body) {
         "description": null,
         "contract_signed_date": null,
         "contract_signature": null,
-        "contract_body": null,
+        "contract_body": "By submitting your order and authorizing the charges on your card, you are legally bound to...",
         "balance": 768.75,
         "auto_process": true,
         "amount": 1025
