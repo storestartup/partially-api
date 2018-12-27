@@ -3,7 +3,7 @@
 ## List All Customers
 
 ```shell
-curl "https://partial.ly/api/v1/customer"
+curl "https://partial.ly/api/customer"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -13,7 +13,7 @@ curl "https://partial.ly/api/v1/customer"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer',
+  url: 'https://partial.ly/api/customer',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -87,7 +87,7 @@ q | Search query. Will search for email if query contains an @, otherwise will s
 ## Get a Specific Customer
 
 ```shell
-curl "https://partial.ly/api/v1/customer/9a426155-a927-4984-8738-0bd1ffc15248"
+curl "https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -95,7 +95,7 @@ curl "https://partial.ly/api/v1/customer/9a426155-a927-4984-8738-0bd1ffc15248"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/9a426155-a927-4984-8738-0bd1ffc15248',
+  url: 'https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -138,7 +138,7 @@ This endpoint retrieves a specific customer.
 ## Create a new customer
 
 ```shell
-curl "https://partial.ly/api/v1/customer" \
+curl "https://partial.ly/api/customer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   --data '{"email": "testing@aol.com", "first_name": "John", "last_name": "Doe"}'
@@ -148,7 +148,7 @@ curl "https://partial.ly/api/v1/customer" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer',
+  url: 'https://partial.ly/api/customer',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -214,7 +214,7 @@ shipto_postal_code | string | no | | ZIP/postal code
 ## Update a customer
 
 ```shell
-curl "https://partial.ly/api/v1/customer/53479e98-27a9-49e2-856c-bf47d0796ffc" \
+curl "https://partial.ly/api/customer/53479e98-27a9-49e2-856c-bf47d0796ffc" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
   --data '{"phone": "+12125551212"}'
@@ -224,7 +224,7 @@ curl "https://partial.ly/api/v1/customer/53479e98-27a9-49e2-856c-bf47d0796ffc" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/53479e98-27a9-49e2-856c-bf47d0796ffc',
+  url: 'https://partial.ly/api/customer/53479e98-27a9-49e2-856c-bf47d0796ffc',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -272,7 +272,7 @@ Same parameters as create customer
 ## GDPR remove
 
 ```shell
-curl "https://partial.ly/api/v1/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc" \
+curl "https://partial.ly/api/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc" \
   -X PUT \
   -H "Authorization: Bearer your_api_key"
 ```
@@ -281,7 +281,7 @@ curl "https://partial.ly/api/v1/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf4
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc',
+  url: 'https://partial.ly/api/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -313,7 +313,7 @@ but all personally identifiable customer information will be anonymized. If the 
 ## Log in with password
 
 ```shell
-curl "https://partial.ly/api/v1/customer/login_password" \
+curl "https://partial.ly/api/customer/login_password" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   --data '{"email": "aaa@y.co", "password": "test"}'
@@ -323,7 +323,7 @@ curl "https://partial.ly/api/v1/customer/login_password" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/login_password',
+  url: 'https://partial.ly/api/customer/login_password',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -374,7 +374,7 @@ password | string | yes
 ## Email login token
 
 ```shell
-curl "https://partial.ly/api/v1/customer/login_email" \
+curl "https://partial.ly/api/customer/login_email" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   --data '{"email": "aaa@y.co"}'
@@ -384,7 +384,7 @@ curl "https://partial.ly/api/v1/customer/login_email" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/login_email',
+  url: 'https://partial.ly/api/customer/login_email',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -420,7 +420,7 @@ email |  string | yes
 ## Login with a token
 
 ```shell
-curl "https://partial.ly/api/v1/customer/login_token" \
+curl "https://partial.ly/api/customer/login_token" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   --data '{"token": "N5E9gL"}'
@@ -430,7 +430,7 @@ curl "https://partial.ly/api/v1/customer/login_token" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/customer/login_token',
+  url: 'https://partial.ly/api/customer/login_token',
   headers: {
     Authorization: 'Bearer your_api_key'
   },

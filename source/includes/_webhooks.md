@@ -3,7 +3,7 @@
 ## Create a webhook
 
 ```shell
-curl "https://partial.ly/api/v1/webhook"
+curl "https://partial.ly/api/webhook"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   --data '{"url": "http://localhost:8888/hook"}'
@@ -15,7 +15,7 @@ curl "https://partial.ly/api/v1/webhook"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/webhook',
+  url: 'https://partial.ly/api/webhook',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -58,7 +58,7 @@ url | string | yes | complete URL of the webhook, including https
 ## List webhooks
 
 ```shell
-curl "https://partial.ly/api/v1/webhook"
+curl "https://partial.ly/api/webhook"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -68,7 +68,7 @@ curl "https://partial.ly/api/v1/webhook"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/webhook',
+  url: 'https://partial.ly/api/webhook',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -101,7 +101,7 @@ Gets all webhooks
 ## Delete a webhook
 
 ```shell
-curl "https://partial.ly/api/v1/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
+curl "https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
   -H "Authorization: Bearer your_api_key" \
   -X DELETE
 ```
@@ -112,7 +112,7 @@ curl "https://partial.ly/api/v1/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
+  url: 'https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
   headers: {
     Authorization: 'Bearer your_api_key'
   },

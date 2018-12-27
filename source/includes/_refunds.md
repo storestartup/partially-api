@@ -3,7 +3,7 @@
 ## Refund a payment
 
 ```shell
-curl "https://partial.ly/api/v1/refund"
+curl "https://partial.ly/api/refund"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   --data '{"payment_id": "2d1d0234-87c4-4184-a49f-02f4c0c30abe", "amount": 5.99, "notes": "discount"}'
@@ -15,7 +15,7 @@ curl "https://partial.ly/api/v1/refund"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/refund',
+  url: 'https://partial.ly/api/refund',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -66,7 +66,7 @@ notes | string | no |
 ## List refunds
 
 ```shell
-curl "https://partial.ly/api/v1/refund"
+curl "https://partial.ly/api/refund"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -76,7 +76,7 @@ curl "https://partial.ly/api/v1/refund"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/refund',
+  url: 'https://partial.ly/api/refund',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

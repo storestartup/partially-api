@@ -5,7 +5,7 @@ A payment schedule represents the terms and schedule for a payment plan. A payme
 ## Update a payment schedule
 
 ```shell
-curl "https://partial.ly/api/v1/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"
+curl "https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"
   -H "Authorization: Bearer your_api_key" \
   -X PUT \
   -- data '{"term": 3}'
@@ -17,7 +17,7 @@ curl "https://partial.ly/api/v1/payment_schedule/64823d54-9d47-4cd9-9db0-b293294
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341',
+  url: 'https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -108,7 +108,7 @@ Gets the binary pdf of the signed contract
 ## Create a new payment schedule
 
 ```shell
-curl "https://partial.ly/api/v1/payment_schedule"
+curl "https://partial.ly/api/payment_schedule"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   -- data '{"payment_plan_id": "71f98dc3-6d89-4e56-b14b-c0e27dac0158", "amount": 188.88, "term": 1, "term_units": "months", "frequency": 1, "frequency_units": "weeks"}'
@@ -120,7 +120,7 @@ curl "https://partial.ly/api/v1/payment_schedule"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_schedule',
+  url: 'https://partial.ly/api/payment_schedule',
   headers: {
     Authorization: 'Bearer your_api_key'
   },

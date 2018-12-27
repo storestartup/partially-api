@@ -5,7 +5,7 @@ An offer is a set of terms for a potential payment plan. Think of an offer as a 
 ## List All Offers
 
 ```shell
-curl "https://partial.ly/api/v1/offer"
+curl "https://partial.ly/api/offer"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -15,7 +15,7 @@ curl "https://partial.ly/api/v1/offer"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/offer',
+  url: 'https://partial.ly/api/offer',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -74,7 +74,7 @@ This endpoint retrieves all offers.
 ## Get a Specific Offer
 
 ```shell
-curl "https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a"
+curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -82,7 +82,7 @@ curl "https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
+  url: 'https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -138,7 +138,7 @@ This endpoint retrieves a specific offer.
 ## Create a new offer
 
 ```shell
-curl "https://partial.ly/api/v1/offer" \
+curl "https://partial.ly/api/offer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   --data '{"name": "Sample offer"}'
@@ -148,7 +148,7 @@ curl "https://partial.ly/api/v1/offer" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/offer',
+  url: 'https://partial.ly/api/offer',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -233,7 +233,7 @@ frequency_max | integer | no | | the maximum payment frequency the customer can 
 ## Update an offer
 
 ```shell
-curl "https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
+curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
   --data '{"down_payment": 5}'
@@ -243,7 +243,7 @@ curl "https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
+  url: 'https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
   headers: {
     Authorization: 'Bearer your_api_key'
   },

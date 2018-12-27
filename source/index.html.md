@@ -30,9 +30,9 @@ The Partial.ly API allows you to programmatically access the data in your Partia
 The API is currently in beta mode, so there may be minor changes. If you have feedback we would love to hear it.
 
 Our API follows REST principles and accepts and returns all data in [JSON](http://www.json.org/) format. POST and PUT data must be JSON encoded, and must have the `Content-Type: application/json` HTTP header.
-The base URL for all API calls is **https://partial.ly/api/v1**. Future versions of the API will have a different base URL, ensuring that we will never make breaking changes.
+The base URL for all API calls is **https://partial.ly/api**.
 
-We also have a staging server at demo.partial.ly, so if you want to test your integration please use the base URL **https://demo.partial.ly/api/v1**. Note that you will have to register for a separate account here than your live Partial.ly account.
+We also have a staging server at demo.partial.ly, so if you want to test your integration please use the base URL **https://demo.partial.ly/api**. Note that you will have to register for a separate account here than your live Partial.ly account.
 
 If you have any questions you can't find the answer to here, please contact our [support](mailto:support@partial.ly).
 
@@ -41,7 +41,7 @@ If you have any questions you can't find the answer to here, please contact our 
 > To authorize, use this code:
 
 ```shell
-curl "https://partial.ly/api/v1/offer"
+curl "https://partial.ly/api/offer"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -51,7 +51,7 @@ curl "https://partial.ly/api/v1/offer"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/offer',
+  url: 'https://partial.ly/api/offer',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

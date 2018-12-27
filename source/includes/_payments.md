@@ -8,7 +8,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 > Pay the entire balance
 
 ```shell
-curl "https://partial.ly/api/v1/payment/create"
+curl "https://partial.ly/api/payment/create"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   -- data '{"payment_plan_id": "1597c18b-ffd4-4641-b2ca-78cccd3547f5", "amount": 241.87}'
@@ -20,7 +20,7 @@ curl "https://partial.ly/api/v1/payment/create"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment/create',
+  url: 'https://partial.ly/api/payment/create',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -59,7 +59,7 @@ request(options, function (error, response, payment) {
 > Making a payment for an amount less than the balance
 
 ```shell
-curl "https://partial.ly/api/v1/payment/create"
+curl "https://partial.ly/api/payment/create"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99}'
@@ -71,7 +71,7 @@ curl "https://partial.ly/api/v1/payment/create"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment/create',
+  url: 'https://partial.ly/api/payment/create',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -196,7 +196,7 @@ amount | decimal | yes | amount of the payment
 ## Confirm a payment
 
 ```shell
-curl "https://partial.ly/api/v1/payment/confirm"
+curl "https://partial.ly/api/payment/confirm"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99, "contract_signature": "Customer signature"}'
@@ -208,7 +208,7 @@ curl "https://partial.ly/api/v1/payment/confirm"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment/confirm',
+  url: 'https://partial.ly/api/payment/confirm',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -262,7 +262,7 @@ contract_signature | string | yes | the customer's signature for the new payment
 ## List all payments
 
 ```shell
-curl "https://partial.ly/api/v1/payment"
+curl "https://partial.ly/api/payment"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -272,7 +272,7 @@ curl "https://partial.ly/api/v1/payment"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment',
+  url: 'https://partial.ly/api/payment',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

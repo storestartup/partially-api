@@ -3,7 +3,7 @@
 ## Create a new payment plan
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan"
+curl "https://partial.ly/api/payment_plan"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   --data '{"amount": "1000", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57", "offer_id": "60aed439-473f-48e0-80ef-3a8627dd243a"}'
@@ -15,7 +15,7 @@ curl "https://partial.ly/api/v1/payment_plan"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan',
+  url: 'https://partial.ly/api/payment_plan',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -177,7 +177,7 @@ weight_units | string | no | lb, g, kg, oz
 ## Open a payment plan
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
@@ -189,7 +189,7 @@ curl "https://partial.ly/api/v1/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  url: 'https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -258,7 +258,7 @@ payment_method.public_token | string | no |
 ## Cancel a payment plan
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+curl "https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"
   -H "Authorization: Bearer your_api_key" \
   -X PUT
 ```
@@ -269,7 +269,7 @@ curl "https://partial.ly/api/v1/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2d
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  url: 'https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -304,7 +304,7 @@ cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify or
 ## Update a payment plan
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
   -H "Authorization: Bearer your_api_key" \
   -X PUT \
   -- data '{"merchant_notes": "Customer is very happy"}'
@@ -316,7 +316,7 @@ curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
+  url: 'https://partial.ly/api/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -396,7 +396,7 @@ shipto_country | string |
 ## Retrieve a payment plan
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -406,7 +406,7 @@ curl "https://partial.ly/api/v1/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
+  url: 'https://partial.ly/api/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -603,7 +603,7 @@ Retrieves an existing payment plan
 ## List all plans
 
 ```shell
-curl "https://partial.ly/api/v1/payment_plan?date=2018-11-28"
+curl "https://partial.ly/api/payment_plan?date=2018-11-28"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -613,7 +613,7 @@ curl "https://partial.ly/api/v1/payment_plan?date=2018-11-28"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_plan?date=2018-11-28',
+  url: 'https://partial.ly/api/payment_plan?date=2018-11-28',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

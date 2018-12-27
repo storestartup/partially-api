@@ -3,7 +3,7 @@
 ## List disputes
 
 ```shell
-curl "https://partial.ly/api/v1/dispute"
+curl "https://partial.ly/api/dispute"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -13,7 +13,7 @@ curl "https://partial.ly/api/v1/dispute"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/dispute',
+  url: 'https://partial.ly/api/dispute',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

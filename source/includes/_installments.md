@@ -5,7 +5,7 @@ Installments represent a payment to be processed in the future, as scheduled by 
 ## Pay scheduled installment
 
 ```shell
-curl "https://partial.ly/api/v1/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1"
+curl "https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1"
   -H "Authorization: Bearer your_api_key" \
   -X PUT
 ```
@@ -16,7 +16,7 @@ curl "https://partial.ly/api/v1/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1',
+  url: 'https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -56,7 +56,7 @@ Pays a scheduled installment. Must be scheduled in the future and not already pa
 ## List installments
 
 ```shell
-curl "https://partial.ly/api/v1/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c"
+curl "https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -66,7 +66,7 @@ curl "https://partial.ly/api/v1/installment?payment_schedule_id=1f5d9716-a041-47
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c',
+  url: 'https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c',
   headers: {
     Authorization: 'Bearer your_api_key'
   }

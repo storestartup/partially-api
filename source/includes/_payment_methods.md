@@ -5,7 +5,7 @@ A saved payment method attached to a customer. May be any type of credit or debi
 ## Create payment method
 
 ```shell
-curl "https://partial.ly/api/v1/payment_method"
+curl "https://partial.ly/api/payment_method"
   -H "Authorization: Bearer your_api_key" \
   -X POST \
   --data '{"type": "card", "token_id": "tok_ch", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57"}'
@@ -17,7 +17,7 @@ curl "https://partial.ly/api/v1/payment_method"
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_method',
+  url: 'https://partial.ly/api/payment_method',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
@@ -153,7 +153,7 @@ account_id | string | no | account id returned from Plaid. Required for bank_acc
 ## List payment methods
 
 ```shell
-curl "https://partial.ly/api/v1/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"
+curl "https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -163,7 +163,7 @@ curl "https://partial.ly/api/v1/payment_method?customer_id=452cc42f-d999-4c0f-99
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57',
+  url: 'https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57',
   headers: {
     Authorization: 'Bearer your_api_key'
   }
@@ -225,7 +225,7 @@ customer_id | string | yes | id of customer to get payment methods for
 ## Delete payment method
 
 ```shell
-curl "https://partial.ly/api/v1/payment_method/36afc659-f03d-485b-a850-65871fa759a7"
+curl "https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7"
   -H "Authorization: Bearer your_api_key" \
   -X DELETE
 ```
@@ -236,7 +236,7 @@ curl "https://partial.ly/api/v1/payment_method/36afc659-f03d-485b-a850-65871fa75
 var request = require('request');
 
 var options = {
-  url: 'https://partial.ly/api/v1/payment_method/36afc659-f03d-485b-a850-65871fa759a7',
+  url: 'https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7',
   headers: {
     Authorization: 'Bearer your_api_key'
   },
