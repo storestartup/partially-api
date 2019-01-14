@@ -3872,10 +3872,11 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-11-28T22:22:06.355439"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60689b2d-d391-417e-9f59-7b65e3e50d8d"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-11-28T22:22:06.355432"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d5e43bed-041c-4ff4-b422-a401b10aad79"</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d5e43bed-041c-4ff4-b422-a401b10aad79"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Creates a new webhook</p>
+<p>Creates a new webhook. Events that can be subscribed to are plan_opened, plan_paid, plan_defaulted, payment_succeeded, and payment_failed</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>POST /webhook</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -3892,6 +3893,12 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>string</td>
 <td>yes</td>
 <td>complete URL of the webhook, including https</td>
+</tr>
+<tr>
+<td>event</td>
+<td>string</td>
+<td>no</td>
+<td>the event to subscribe to, or * for all events (default)</td>
 </tr>
 </tbody></table>
 <h2 id='list-webhooks'>List webhooks</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span>
@@ -3921,7 +3928,8 @@ Can&#39;t be done for open or paid status plans.</p>
         </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-08T15:34:35.207108"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60689b2d-d391-417e-9f59-7b65e3e50d8d"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-03-08T15:34:35.207102"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0aeece05-8e24-419b-a2ad-466a70de9b4b"</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0aeece05-8e24-419b-a2ad-466a70de9b4b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
