@@ -40,11 +40,12 @@ request(options, function (error, response, webhook) {
     "updated_at": "2018-11-28T22:22:06.355439",
     "merchant_id": "60689b2d-d391-417e-9f59-7b65e3e50d8d",
     "inserted_at": "2018-11-28T22:22:06.355432",
-    "id": "d5e43bed-041c-4ff4-b422-a401b10aad79"
+    "id": "d5e43bed-041c-4ff4-b422-a401b10aad79",
+    "event": "*"
 }
 ```
 
-Creates a new webhook
+Creates a new webhook. Events that can be subscribed to are plan_opened, plan_paid, plan_defaulted, payment_succeeded, and payment_failed
 
 ### HTTP request
 
@@ -54,6 +55,7 @@ Creates a new webhook
 Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 url | string | yes | complete URL of the webhook, including https
+event | string | no | the event to subscribe to, or * for all events (default)
 
 ## List webhooks
 
@@ -88,7 +90,8 @@ request(options, function (error, response, hooks) {
         "updated_at": "2018-03-08T15:34:35.207108",
         "merchant_id": "60689b2d-d391-417e-9f59-7b65e3e50d8d",
         "inserted_at": "2018-03-08T15:34:35.207102",
-        "id": "0aeece05-8e24-419b-a2ad-466a70de9b4b"
+        "id": "0aeece05-8e24-419b-a2ad-466a70de9b4b",
+        "event": "*"
     }
 ]
 ```
