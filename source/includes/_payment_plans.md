@@ -162,6 +162,7 @@ shipto_city | string | no | city
 shipto_state | string | no | 2 letter state/region/province code
 shipto_postal_code | string | no | zip/postal code
 shipto_country | string | no | 2 letter country abbreviation
+integration | string | no | third party integration to send payment plan to. shopify, woocommerce, bigcommerce, opencart, or prestashop
 
 
 ### line_items
@@ -173,6 +174,7 @@ quantity | integer | yes | quantity
 image | string | no | URL for an image to display in Partial.ly
 weight | decimal | no | weight of the item
 weight_units | string | no | lb, g, kg, oz
+meta | object | no | additional meta data for line item. For Shopify integrations, meta.product_id and meta.variant_id must be set
 
 ## Open a payment plan
 
