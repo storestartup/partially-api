@@ -2136,6 +2136,12 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>no</td>
 <td>2 letter country abbreviation</td>
 </tr>
+<tr>
+<td>integration</td>
+<td>string</td>
+<td>no</td>
+<td>third party integration to send payment plan to. shopify, woocommerce, bigcommerce, opencart, or prestashop</td>
+</tr>
 </tbody></table>
 <h3 id='line_items'>line_items</h3>
 <table><thead>
@@ -2181,6 +2187,12 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>string</td>
 <td>no</td>
 <td>lb, g, kg, oz</td>
+</tr>
+<tr>
+<td>meta</td>
+<td>object</td>
+<td>no</td>
+<td>additional meta data for line item. For Shopify integrations, meta.product_id and meta.variant_id must be set</td>
 </tr>
 </tbody></table>
 <h2 id='open-a-payment-plan'>Open a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span>
