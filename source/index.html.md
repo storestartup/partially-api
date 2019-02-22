@@ -14,6 +14,7 @@ includes:
   - customers
   - payment_methods
   - payment_plans
+  - line_items
   - payments
   - payment_schedules
   - installments
