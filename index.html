@@ -334,6 +334,17 @@
               </ul>
           </li>
           <li>
+            <a href="#line-items" class="toc-h1 toc-link" data-title="Line Items">Line Items</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-a-line-item" class="toc-h2 toc-link" data-title="Create a line item">Create a line item</a>
+                  </li>
+                  <li>
+                    <a href="#delete-a-line-item" class="toc-h2 toc-link" data-title="Delete a line item">Delete a line item</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#payments" class="toc-h1 toc-link" data-title="Payments">Payments</a>
               <ul class="toc-list-h2">
                   <li>
@@ -2768,6 +2779,144 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>plans with the given customer id</td>
 </tr>
 </tbody></table>
+<h1 id='line-items'>Line Items</h1><h2 id='create-a-line-item'>Create a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item"</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -- data <span class="s1">'{"payment_plan_id": "4a2da2b5-ccbc-4631-93ad-ea30da49a412", "amount": 5.99, "description": "adjustment"}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/line_item'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">json</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">payment_plan_id</span><span class="p">:</span> <span class="s1">'4a2da2b5-ccbc-4631-93ad-ea30da49a412'</span><span class="p">,</span>
+    <span class="na">amount</span><span class="p">:</span> <span class="mf">5.99</span><span class="p">,</span>
+    <span class="na">description</span><span class="p">:</span> <span class="s1">'adjustment'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">payment</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.99</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"adjustment"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2faa91f1-7b01-4111-9af9-967e70c272e8"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-02-22T15:24:23"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Adds a new line item to a payment plan. This can only be done on payment plans not in the open or paid statuses.</p>
+
+<p>Adding a new line item to a payment plan will automatically adjust the payment plan total.</p>
+
+<p>Line item amounts can be negative to decrease a payment plan amount, for example to give a customer a discount.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST /line_item</code></p>
+<h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payment_plan_id</td>
+<td>string</td>
+<td>yes</td>
+<td>id of the plan to make a payment on</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>decimal</td>
+<td>yes</td>
+<td>The unit price of the line item. May be positive or negative</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>yes</td>
+<td>the line item&#39;s description</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>integer</td>
+<td>no</td>
+<td>Th quantity of the line item. Defaults to 1 if not specified</td>
+</tr>
+<tr>
+<td>image</td>
+<td>string</td>
+<td>no</td>
+<td>URL to an image for the line item</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>decimal</td>
+<td>no</td>
+<td>weight of the line item</td>
+</tr>
+<tr>
+<td>weight_units</td>
+<td>string</td>
+<td>no</td>
+<td>g, kg, oz, or lb. defaults to lb</td>
+</tr>
+<tr>
+<td>meta</td>
+<td>object</td>
+<td>no</td>
+<td>additional meta information about the line item</td>
+</tr>
+</tbody></table>
+<h2 id='delete-a-line-item'>Delete a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -X DELETE
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'DELETE'</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LineItem deleted"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Deletes a line item. This can only be done on payment plans not in the open or paid statuses.</p>
+
+<p>Deleting a line item will automatically decrease the associated payment plan&#39;s total amount.</p>
+
+<p><code>DELETE /line_item/:id</code></p>
+
+<p><em>replace :id with the id of the line item to delete</em></p>
 <h1 id='payments'>Payments</h1>
 <p>Payments can have a <em>paid</em>, <em>pending</em>, or <em>failed</em> status. Payments made with a bank account payment method
 will be pending for up to 5 business days while we wait for them to be confirmed.</p>
