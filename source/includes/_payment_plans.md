@@ -252,7 +252,7 @@ Opens a payment plan by signing the customer contract, attaching a payment metho
 
 Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
-payment_schedule.customer_signature | string | yes | customer's signature
+payment_schedule.contract_signature | string | yes | customer's signature
 payment_method.id | string | no | existing payment method id
 payment_method.type | string | no | card or bank_account, required if payment_method.id not sent
 payment_method.token_id | string | no | see [Payment Methods] for details on creating new payment methods
