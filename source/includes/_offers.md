@@ -141,6 +141,7 @@ This endpoint retrieves a specific offer.
 curl "https://partial.ly/api/offer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"name": "Sample offer"}'
 ```
 
@@ -236,6 +237,7 @@ frequency_max | integer | no | | the maximum payment frequency the customer can 
 curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"down_payment": 5}'
 ```
 

@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/payment_plan"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   --data '{"amount": "1000", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57", "offer_id": "60aed439-473f-48e0-80ef-3a8627dd243a"}'
 ```
@@ -181,6 +182,7 @@ meta | object | no | additional meta data for line item. For Shopify integration
 ```shell
 curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
 ```
@@ -308,6 +310,7 @@ cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify or
 ```shell
 curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X PUT \
   -- data '{"merchant_notes": "Customer is very happy"}'
 ```

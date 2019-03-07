@@ -7,6 +7,7 @@ A payment schedule represents the terms and schedule for a payment plan. A payme
 ```shell
 curl "https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X PUT \
   -- data '{"term": 3}'
 ```
@@ -110,6 +111,7 @@ Gets the binary pdf of the signed contract
 ```shell
 curl "https://partial.ly/api/payment_schedule"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   -- data '{"payment_plan_id": "71f98dc3-6d89-4e56-b14b-c0e27dac0158", "amount": 188.88, "term": 1, "term_units": "months", "frequency": 1, "frequency_units": "weeks"}'
 ```

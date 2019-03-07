@@ -10,6 +10,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 ```shell
 curl "https://partial.ly/api/payment/create"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   -- data '{"payment_plan_id": "1597c18b-ffd4-4641-b2ca-78cccd3547f5", "amount": 241.87}'
 ```
@@ -61,6 +62,7 @@ request(options, function (error, response, payment) {
 ```shell
 curl "https://partial.ly/api/payment/create"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99}'
 ```
@@ -198,6 +200,7 @@ amount | decimal | yes | amount of the payment
 ```shell
 curl "https://partial.ly/api/payment/confirm"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99, "contract_signature": "Customer signature"}'
 ```

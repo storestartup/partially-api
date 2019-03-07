@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/refund"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   --data '{"payment_id": "2d1d0234-87c4-4184-a49f-02f4c0c30abe", "amount": 5.99, "notes": "discount"}'
 ```
@@ -61,7 +62,7 @@ Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 payment_id | string | yes | id of the payment to refund
 amount | decimal | yes | amount to refund
-notes | string | no | 
+notes | string | no |
 
 ## List refunds
 

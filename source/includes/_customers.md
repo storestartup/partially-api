@@ -141,6 +141,7 @@ This endpoint retrieves a specific customer.
 curl "https://partial.ly/api/customer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"email": "testing@aol.com", "first_name": "John", "last_name": "Doe"}'
 ```
 
@@ -217,6 +218,7 @@ shipto_postal_code | string | no | | ZIP/postal code
 curl "https://partial.ly/api/customer/53479e98-27a9-49e2-856c-bf47d0796ffc" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"phone": "+12125551212"}'
 ```
 
@@ -316,6 +318,7 @@ but all personally identifiable customer information will be anonymized. If the 
 curl "https://partial.ly/api/customer/login_password" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"email": "aaa@y.co", "password": "test"}'
 ```
 
@@ -377,6 +380,7 @@ password | string | yes
 curl "https://partial.ly/api/customer/login_email" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"email": "aaa@y.co"}'
 ```
 
@@ -423,6 +427,7 @@ email |  string | yes
 curl "https://partial.ly/api/customer/login_token" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   --data '{"token": "N5E9gL"}'
 ```
 

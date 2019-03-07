@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/webhook"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   --data '{"url": "http://localhost:8888/hook"}'
 ```

@@ -7,6 +7,7 @@ A saved payment method attached to a customer. May be any type of credit or debi
 ```shell
 curl "https://partial.ly/api/payment_method"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   --data '{"type": "card", "token_id": "tok_ch", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57"}'
 ```

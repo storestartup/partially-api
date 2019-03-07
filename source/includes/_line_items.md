@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/line_item"
   -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
   -X POST \
   -- data '{"payment_plan_id": "4a2da2b5-ccbc-4631-93ad-ea30da49a412", "amount": 5.99, "description": "adjustment"}'
 ```
