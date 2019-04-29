@@ -343,5 +343,5 @@ q | string | a stripe payment id
 status | string | payment status. paid, pending, or failed
 currency | string | 3 letter currency code
 date | date | payment created date. YYYY-MM-DD
-dateRange | string | payments created in a range of dates. Ex. use "2018-01-01|2018-02-01"
+dateRange | string | payments created in a range of dates separated by the &#124; character. Ex. use "2018-01-01&#124;2018-02-01"
 customer | string | payments with the given customer id

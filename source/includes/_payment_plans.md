@@ -688,5 +688,5 @@ Parameter | Type | Description
 status | string | plan status. checkout, pending, open, paid, canceled, or defaulted
 currency | string | 3 letter currency code
 date | date | plan created date. YYYY-MM-DD
-dateRange | string | plans created in a range of dates. Ex. use "2018-01-01|2018-02-01"
+dateRange | string | plans created in a range of dates separated by the &#124; character. Ex. use "2018-01-01&#124;2018-02-01"
 customer | string | plans with the given customer id
