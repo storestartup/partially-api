@@ -2496,6 +2496,16 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>string</td>
 <td></td>
 </tr>
+<tr>
+<td>integration</td>
+<td>string</td>
+<td>third party service to integrate plan with, for example &quot;shopify&quot;</td>
+</tr>
+<tr>
+<td>integration_id</td>
+<td>string</td>
+<td>third party service id, for example shopify order id</td>
+</tr>
 </tbody></table>
 <h2 id='retrieve-a-payment-plan'>Retrieve a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
