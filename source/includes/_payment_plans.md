@@ -397,6 +397,8 @@ shipto_city | string |
 shipto_state | string |
 shipto_postal_code | string |
 shipto_country | string |
+integration | string | third party service to integrate plan with, for example "shopify"
+integration_id | string | third party service id, for example shopify order id
 
 ## Retrieve a payment plan
 
