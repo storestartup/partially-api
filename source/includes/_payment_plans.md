@@ -183,7 +183,7 @@ meta | object | no | additional meta data for line item. For Shopify integration
 curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
-  -X POST \
+  -X PUT \
   --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
 ```
 
