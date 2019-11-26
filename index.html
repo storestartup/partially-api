@@ -2220,7 +2220,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <h2 id='open-a-payment-plan'>Open a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
-  -X POST <span class="se">\</span>
+  -X PUT <span class="se">\</span>
   --data <span class="s1">'{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
