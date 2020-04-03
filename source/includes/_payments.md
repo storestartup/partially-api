@@ -8,7 +8,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 > Pay the entire balance
 
 ```shell
-curl "https://partial.ly/api/payment/create"
+curl "https://partial.ly/api/payment/create" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -60,7 +60,7 @@ request(options, function (error, response, payment) {
 > Making a payment for an amount less than the balance
 
 ```shell
-curl "https://partial.ly/api/payment/create"
+curl "https://partial.ly/api/payment/create" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -198,7 +198,7 @@ amount | decimal | yes | amount of the payment
 ## Confirm a payment
 
 ```shell
-curl "https://partial.ly/api/payment/confirm"
+curl "https://partial.ly/api/payment/confirm" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -265,7 +265,7 @@ contract_signature | string | yes | the customer's signature for the new payment
 ## List all payments
 
 ```shell
-curl "https://partial.ly/api/payment"
+curl "https://partial.ly/api/payment" \
   -H "Authorization: Bearer your_api_key"
 ```
 

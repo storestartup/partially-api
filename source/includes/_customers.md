@@ -3,7 +3,7 @@
 ## List All Customers
 
 ```shell
-curl "https://partial.ly/api/customer"
+curl "https://partial.ly/api/customer" \
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -87,7 +87,7 @@ q | Search query. Will search for email if query contains an @, otherwise will s
 ## Get a Specific Customer
 
 ```shell
-curl "https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248"
+curl "https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248" \
   -H "Authorization: Bearer your_api_key"
 ```
 

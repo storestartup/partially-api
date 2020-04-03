@@ -3,7 +3,7 @@
 ## Refund a payment
 
 ```shell
-curl "https://partial.ly/api/refund"
+curl "https://partial.ly/api/refund" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -67,7 +67,7 @@ notes | string | no |
 ## List refunds
 
 ```shell
-curl "https://partial.ly/api/refund"
+curl "https://partial.ly/api/refund" \
   -H "Authorization: Bearer your_api_key"
 ```
 

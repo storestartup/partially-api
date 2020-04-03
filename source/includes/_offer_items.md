@@ -6,7 +6,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.
 ## List offer items
 
 ```shell
-curl "https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a"
+curl "https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a" \
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -61,7 +61,7 @@ offer_id | string | yes | offer id to get offer items for
 ## Create a new offer item
 
 ```shell
-curl "https://partial.ly/api/offer_item"
+curl "https://partial.ly/api/offer_item" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -125,7 +125,7 @@ amount | decimal | yes | | The amount to add to the plan. For percent will be th
 ## Update offer item
 
 ```shell
-curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
+curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X PUT \
@@ -179,7 +179,7 @@ Same parameters as create offer item
 ## Delete offer item
 
 ```shell
-curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
+curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
   -X DELETE
 ```

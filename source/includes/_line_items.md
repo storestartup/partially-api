@@ -3,7 +3,7 @@
 ## Create a line item
 
 ```shell
-curl "https://partial.ly/api/line_item"
+curl "https://partial.ly/api/line_item" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -74,7 +74,7 @@ meta | object | no | additional meta information about the line item
 ## Delete a line item
 
 ```shell
-curl "https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"
+curl "https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
   -X DELETE
 ```
