@@ -331,6 +331,9 @@
                   <li>
                     <a href="#list-all-plans" class="toc-h2 toc-link" data-title="List all plans">List all plans</a>
                   </li>
+                  <li>
+                    <a href="#send-plan-request-email" class="toc-h2 toc-link" data-title="Send plan request email">Send plan request email</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -438,7 +441,7 @@ The base URL for all API calls is <strong>https://partial.ly/api</strong>.</p>
 <blockquote>
 <p>To authorize, use this code:</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -524,7 +527,7 @@ You must replace <code>your_api_key</code> with your personal API key.
 <p>Successful API calls will return HTTP status code 200. API calls that result in an error will either return HTTP status code 400 is there is a problem with the input, or 404 if a given object could not be found. The response body will be JSON object with a message key giving an overview of the issue. If there are issues with specific fields, there will also be an errors key with an array of field specific errors.</p>
 <h1 id='offers'>Offers</h1>
 <p>An offer is a set of terms for a potential payment plan. Think of an offer as a template for a payment plan. There are 3 variables that can be customized for an offer: down payment, payment frequency, and term. Offers can additionally have dynamically added line items, such as a payment plan fee or service charge, which can be a fixed amount or percent of the payment plan subtotal. Offers can be embedded on your website (Shopify, WooCommerce, etc.) to provide a payment plan checkout option for your customers. Or they can be used as template to quickly and easily create payment plans for invoices (FreshBooks, QuickBooks, Harvest)</p>
-<h2 id='list-all-offers'>List All Offers</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer"</span>
+<h2 id='list-all-offers'>List All Offers</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -580,7 +583,7 @@ You must replace <code>your_api_key</code> with your personal API key.
 <p>This endpoint retrieves all offers.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET /offer</code></p>
-<h2 id='get-a-specific-offer'>Get a Specific Offer</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a"</span>
+<h2 id='get-a-specific-offer'>Get a Specific Offer</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
 
@@ -916,7 +919,7 @@ You must replace <code>your_api_key</code> with your personal API key.
 <h1 id='offer-items'>Offer Items</h1>
 <p>Offer items are additional line items that can automatically be added to a payment plan, a customer fee for instance.
 Offer items can be for fixed amounts or a percent of the payment plan subtotal.</p>
-<h2 id='list-offer-items'>List offer items</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a"</span>
+<h2 id='list-offer-items'>List offer items</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -970,7 +973,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.<
 <td>offer id to get offer items for</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-offer-item'>Create a new offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item"</span>
+<h2 id='create-a-new-offer-item'>Create a new offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -1053,7 +1056,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.<
 <td>The amount to add to the plan. For percent will be this percent of the plan subtotal</td>
 </tr>
 </tbody></table>
-<h2 id='update-offer-item'>Update offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span>
+<h2 id='update-offer-item'>Update offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
@@ -1098,7 +1101,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.<
 <p><em>replace :id with the id of the offer item to update</em></p>
 
 <p>Same parameters as create offer item</p>
-<h2 id='delete-offer-item'>Delete offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span>
+<h2 id='delete-offer-item'>Delete offer item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X DELETE
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -1129,7 +1132,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.<
 <p><code>DELETE /offer_item/:id</code></p>
 
 <p><em>replace :id with the id of the offer item to delete</em></p>
-<h1 id='customers'>Customers</h1><h2 id='list-all-customers'>List All Customers</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/customer"</span>
+<h1 id='customers'>Customers</h1><h2 id='list-all-customers'>List All Customers</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/customer"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -1206,7 +1209,7 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.<
 <td>Search query. Will search for email if query contains an @, otherwise will search for partial match on first and last names</td>
 </tr>
 </tbody></table>
-<h2 id='get-a-specific-customer'>Get a Specific Customer</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248"</span>
+<h2 id='get-a-specific-customer'>Get a Specific Customer</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
 
@@ -1653,7 +1656,7 @@ but all personally identifiable customer information will be anonymized. If the 
 </tbody></table>
 <h1 id='payment-methods'>Payment Methods</h1>
 <p>A saved payment method attached to a customer. May be any type of credit or debit card, or a bank account for supported US based customers.</p>
-<h2 id='create-payment-method'>Create payment method</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method"</span>
+<h2 id='create-payment-method'>Create payment method</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -1819,7 +1822,7 @@ but all personally identifiable customer information will be anonymized. If the 
 <td>account id returned from Plaid. Required for bank_account type</td>
 </tr>
 </tbody></table>
-<h2 id='list-payment-methods'>List payment methods</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"</span>
+<h2 id='list-payment-methods'>List payment methods</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -1890,7 +1893,7 @@ but all personally identifiable customer information will be anonymized. If the 
 <td>id of customer to get payment methods for</td>
 </tr>
 </tbody></table>
-<h2 id='delete-payment-method'>Delete payment method</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7"</span>
+<h2 id='delete-payment-method'>Delete payment method</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X DELETE
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -1921,7 +1924,7 @@ but all personally identifiable customer information will be anonymized. If the 
 <p><code>DELETE /payment_method/:id</code></p>
 
 <p><em>replace :id with the id of the payment method to delete</em></p>
-<h1 id='payment-plans'>Payment Plans</h1><h2 id='create-a-new-payment-plan'>Create a new payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan"</span>
+<h1 id='payment-plans'>Payment Plans</h1><h2 id='create-a-new-payment-plan'>Create a new payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -2164,6 +2167,18 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>no</td>
 <td>third party integration to send payment plan to. shopify, woocommerce, bigcommerce, opencart, or prestashop</td>
 </tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>no</td>
+<td>checkout or pending. default is checkout</td>
+</tr>
+<tr>
+<td>send_plan_request</td>
+<td>string</td>
+<td>no</td>
+<td>set to true to send a plan request email to customer to complete checkout. plan must be in pending status</td>
+</tr>
 </tbody></table>
 <h3 id='line_items'>line_items</h3>
 <table><thead>
@@ -2217,7 +2232,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>additional meta data for line item. For Shopify integrations, meta.product_id and meta.variant_id must be set</td>
 </tr>
 </tbody></table>
-<h2 id='open-a-payment-plan'>Open a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span>
+<h2 id='open-a-payment-plan'>Open a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
@@ -2323,7 +2338,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='cancel-a-payment-plan'>Cancel a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span>
+<h2 id='cancel-a-payment-plan'>Cancel a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X PUT
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -2375,7 +2390,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>if this payment plan is for a Shopify order, also restock the items from the order</td>
 </tr>
 </tbody></table>
-<h2 id='update-a-payment-plan'>Update a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span>
+<h2 id='update-a-payment-plan'>Update a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
@@ -2507,7 +2522,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>third party service id, for example shopify order id</td>
 </tr>
 </tbody></table>
-<h2 id='retrieve-a-payment-plan'>Retrieve a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span>
+<h2 id='retrieve-a-payment-plan'>Retrieve a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -2703,7 +2718,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <h3 id='http-request-5'>HTTP Request</h3>
 <p><code>GET /payment_plan/:id</code>
 <em>replace :id with the id of the plan</em></p>
-<h2 id='list-all-plans'>List all plans</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan?date=2018-11-28"</span>
+<h2 id='list-all-plans'>List all plans</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan?date=2018-11-28"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -2802,7 +2817,40 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>plans with the given customer id</td>
 </tr>
 </tbody></table>
-<h1 id='line-items'>Line Items</h1><h2 id='create-a-line-item'>Create a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item"</span>
+<h2 id='send-plan-request-email'>Send plan request email</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  --data <span class="s1">''</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">json</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plan request email sent"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending status</p>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>POST /payment_plan/send_plan_request/:id</code></p>
+<h1 id='line-items'>Line Items</h1><h2 id='create-a-line-item'>Create a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -2908,7 +2956,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>additional meta information about the line item</td>
 </tr>
 </tbody></table>
-<h2 id='delete-a-line-item'>Delete a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span>
+<h2 id='delete-a-line-item'>Delete a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X DELETE
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -2948,7 +2996,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 <blockquote>
 <p>Pay the entire balance</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/create"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/create"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -2995,7 +3043,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 <blockquote>
 <p>Making a payment for an amount less than the balance</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/create"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/create"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -3138,7 +3186,7 @@ installments, and contract for the customer to sign. Which is completed in the <
 <td>amount of the payment</td>
 </tr>
 </tbody></table>
-<h2 id='confirm-a-payment'>Confirm a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/confirm"</span>
+<h2 id='confirm-a-payment'>Confirm a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/confirm"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -3215,7 +3263,7 @@ signs the updated payment schedule contract from the create step and processes t
 <td>the customer&#39;s signature for the new payment schedule contract</td>
 </tr>
 </tbody></table>
-<h2 id='list-all-payments'>List all payments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment"</span>
+<h2 id='list-all-payments'>List all payments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -3322,7 +3370,7 @@ signs the updated payment schedule contract from the create step and processes t
 </tbody></table>
 <h1 id='payment-schedules'>Payment Schedules</h1>
 <p>A payment schedule represents the terms and schedule for a payment plan. A payment plan can have multiple payment schedules if the customer makes a one off payment that adjusts the current payment schedule. A payment plan only has one active payment schedule  </p>
-<h2 id='update-a-payment-schedule'>Update a payment schedule</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"</span>
+<h2 id='update-a-payment-schedule'>Update a payment schedule</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
@@ -3424,7 +3472,7 @@ signs the updated payment schedule contract from the create step and processes t
 <p>Gets the binary pdf of the signed contract</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET /payment_schedule/contract_pdf/:id</code></p>
-<h2 id='create-a-new-payment-schedule'>Create a new payment schedule</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule"</span>
+<h2 id='create-a-new-payment-schedule'>Create a new payment schedule</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -3683,7 +3731,7 @@ Can&#39;t be done for open or paid status plans.</p>
 </tbody></table>
 <h1 id='installments'>Installments</h1>
 <p>Installments represent a payment to be processed in the future, as scheduled by a payment plan&#39;s payment schedule.</p>
-<h2 id='pay-scheduled-installment'>Pay scheduled installment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1"</span>
+<h2 id='pay-scheduled-installment'>Pay scheduled installment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X PUT
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -3723,7 +3771,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <p>Pays a scheduled installment. Must be scheduled in the future and not already paid. If successful will return the payment.</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>PUT /installment/pay/:id</code></p>
-<h2 id='list-installments'>List installments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c"</span>
+<h2 id='list-installments'>List installments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -3768,7 +3816,7 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>Gets all installments for the given <em>payment_schedule_id</em>. You can also list all upcoming installments for a customer by providing a <em>customer_id</em> parameter.</p>
-<h1 id='refunds'>Refunds</h1><h2 id='refund-a-payment'>Refund a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/refund"</span>
+<h1 id='refunds'>Refunds</h1><h2 id='refund-a-payment'>Refund a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/refund"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -3842,7 +3890,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='list-refunds'>List refunds</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/refund"</span>
+<h2 id='list-refunds'>List refunds</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/refund"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -3963,7 +4011,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>refunds with the given customer id</td>
 </tr>
 </tbody></table>
-<h1 id='disputes'>Disputes</h1><h2 id='list-disputes'>List disputes</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/dispute"</span>
+<h1 id='disputes'>Disputes</h1><h2 id='list-disputes'>List disputes</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/dispute"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -4030,7 +4078,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>disputes with the given customer id</td>
 </tr>
 </tbody></table>
-<h1 id='webhooks'>Webhooks</h1><h2 id='create-a-webhook'>Create a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span>
+<h1 id='webhooks'>Webhooks</h1><h2 id='create-a-webhook'>Create a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -4093,7 +4141,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>the event to subscribe to, or * for all events (default)</td>
 </tr>
 </tbody></table>
-<h2 id='list-webhooks'>List webhooks</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span>
+<h2 id='list-webhooks'>List webhooks</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -4128,7 +4176,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <p>Gets all webhooks</p>
 <h3 id='http-request-2'>HTTP request</h3>
 <p><code>GET /webhook</code></p>
-<h2 id='delete-a-webhook'>Delete a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span>
+<h2 id='delete-a-webhook'>Delete a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X DELETE
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
