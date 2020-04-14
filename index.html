@@ -3728,6 +3728,20 @@ Can&#39;t be done for open or paid status plans.</p>
 <td></td>
 <td>the maximum payment frequency the customer can choose</td>
 </tr>
+<tr>
+<td>starts_auto</td>
+<td>boolean</td>
+<td>no</td>
+<td>true</td>
+<td>whether or not to automatically schedule the first installment relative to today&#39;s date</td>
+</tr>
+<tr>
+<td>starts_date</td>
+<td>string</td>
+<td>no</td>
+<td></td>
+<td>if starts_auto is false, the specified date will be the date of the first scheduled installment. YYYY-mm-dd</td>
+</tr>
 </tbody></table>
 <h1 id='installments'>Installments</h1>
 <p>Installments represent a payment to be processed in the future, as scheduled by a payment plan&#39;s payment schedule.</p>
