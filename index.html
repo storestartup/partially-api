@@ -2955,6 +2955,18 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>no</td>
 <td>additional meta information about the line item</td>
 </tr>
+<tr>
+<td>integration</td>
+<td>string</td>
+<td>no</td>
+<td>third party service to send line item to, ex. &quot;shopify&quot; or &quot;bigcommerce&quot;</td>
+</tr>
+<tr>
+<td>integration_id</td>
+<td>string</td>
+<td>no</td>
+<td>line item id for third party service</td>
+</tr>
 </tbody></table>
 <h2 id='delete-a-line-item'>Delete a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
