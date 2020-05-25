@@ -70,6 +70,8 @@ image | string | no | URL to an image for the line item
 weight | decimal | no | weight of the line item
 weight_units | string | no | g, kg, oz, or lb. defaults to lb
 meta | object | no | additional meta information about the line item
+integration | string | no | third party service to send line item to, ex. "shopify" or "bigcommerce"
+integration_id | string | no | line item id for third party service 
 
 ## Delete a line item
 
