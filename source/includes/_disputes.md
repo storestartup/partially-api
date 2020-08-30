@@ -3,7 +3,7 @@
 ## List disputes
 
 ```shell
-curl "https://partial.ly/api/dispute"
+curl "https://partial.ly/api/dispute" \
   -H "Authorization: Bearer your_api_key"
 ```
 

@@ -5,7 +5,7 @@ A payment schedule represents the terms and schedule for a payment plan. A payme
 ## Update a payment schedule
 
 ```shell
-curl "https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"
+curl "https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X PUT \
@@ -109,7 +109,7 @@ Gets the binary pdf of the signed contract
 ## Create a new payment schedule
 
 ```shell
-curl "https://partial.ly/api/payment_schedule"
+curl "https://partial.ly/api/payment_schedule" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -235,3 +235,5 @@ frequency_days | array | no | | array of specific days of the month for payments
 frequency_flexible | boolean | no | false | allow the customer to choose their payment frequency within the specified range
 frequency_min | integer | no | | the minimum payment frequency the customer can choose
 frequency_max | integer | no | | the maximum payment frequency the customer can choose
+starts_auto | boolean | no | true | whether or not to automatically schedule the first installment relative to today's date
+starts_date | string | no | | if starts_auto is false, the specified date will be the date of the first scheduled installment. YYYY-mm-dd

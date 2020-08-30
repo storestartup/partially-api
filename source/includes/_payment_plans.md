@@ -3,7 +3,7 @@
 ## Create a new payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan"
+curl "https://partial.ly/api/payment_plan" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X POST \
@@ -164,6 +164,8 @@ shipto_state | string | no | 2 letter state/region/province code
 shipto_postal_code | string | no | zip/postal code
 shipto_country | string | no | 2 letter country abbreviation
 integration | string | no | third party integration to send payment plan to. shopify, woocommerce, bigcommerce, opencart, or prestashop
+status | string | no | checkout or pending. default is checkout
+send_plan_request | string | no | set to true to send a plan request email to customer to complete checkout. plan must be in pending status
 
 
 ### line_items
@@ -180,10 +182,10 @@ meta | object | no | additional meta data for line item. For Shopify integration
 ## Open a payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
-  -X POST \
+  -X PUT \
   --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
 ```
 
@@ -262,7 +264,7 @@ payment_method.public_token | string | no |
 ## Cancel a payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"
+curl "https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
   -H "Authorization: Bearer your_api_key" \
   -X PUT
 ```
@@ -308,7 +310,7 @@ cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify or
 ## Update a payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
   -X PUT \
@@ -397,11 +399,13 @@ shipto_city | string |
 shipto_state | string |
 shipto_postal_code | string |
 shipto_country | string |
+integration | string | third party service to integrate plan with, for example "shopify"
+integration_id | string | third party service id, for example shopify order id
 
 ## Retrieve a payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b"
+curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -608,7 +612,7 @@ Retrieves an existing payment plan
 ## List all plans
 
 ```shell
-curl "https://partial.ly/api/payment_plan?date=2018-11-28"
+curl "https://partial.ly/api/payment_plan?date=2018-11-28" \
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -690,3 +694,47 @@ currency | string | 3 letter currency code
 date | date | plan created date. YYYY-MM-DD
 dateRange | string | plans created in a range of dates separated by the &#124; character. Ex. use "2018-01-01&#124;2018-02-01"
 customer | string | plans with the given customer id
+
+## Send plan request email
+
+```shell
+curl "https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  --data ''
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'POST',
+  json: true,
+  body: {}
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "message": "Plan request email sent"
+}
+```
+
+Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending status
+
+### HTTP Request
+
+`POST /payment_plan/send_plan_request/:id`

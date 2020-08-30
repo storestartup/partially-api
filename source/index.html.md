@@ -42,7 +42,7 @@ If you have any questions you can't find the answer to here, please contact our 
 > To authorize, use this code:
 
 ```shell
-curl "https://partial.ly/api/offer"
+curl "https://partial.ly/api/offer" \
   -H "Authorization: Bearer your_api_key"
 ```
 

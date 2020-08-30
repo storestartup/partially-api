@@ -5,7 +5,7 @@ An offer is a set of terms for a potential payment plan. Think of an offer as a 
 ## List All Offers
 
 ```shell
-curl "https://partial.ly/api/offer"
+curl "https://partial.ly/api/offer" \
   -H "Authorization: Bearer your_api_key"
 ```
 
@@ -74,7 +74,7 @@ This endpoint retrieves all offers.
 ## Get a Specific Offer
 
 ```shell
-curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a"
+curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
   -H "Authorization: Bearer your_api_key"
 ```
 
