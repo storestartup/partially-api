@@ -53,7 +53,9 @@ request(options, function (error, response, payment) {
     "inserted_at": "2018-11-28T19:44:21.874251",
     "id": "2c84ae4a-962c-479b-bed4-4696ef25099d",
     "currency": "USD",
-    "amount": 241.87
+    "amount": 241.87,
+    "fee": 12.39,
+    "customer_fee_amount": 0.0
 }
 ```
 
@@ -244,7 +246,9 @@ request(options, function (error, response, payment) {
     "inserted_at": "2018-11-28T19:56:17.050690",
     "id": "e632f099-4c2b-4de9-b632-3966539be2d5",
     "currency": "USD",
-    "amount": 5.99
+    "amount": 5.99,
+    "fee": 0.6,
+    "customer_fee_amount": 0.0
 }
 ```
 
@@ -305,7 +309,9 @@ request(options, function (error, response, body) {
             "inserted_at": "2018-11-28T19:56:17.050690",
             "id": "e632f099-4c2b-4de9-b632-3966539be2d5",
             "currency": "USD",
-            "amount": 5.99
+            "amount": 5.99,
+            "fee": 0.6,
+            "customer_fee_amount": 0.0
         },
         {
             "status": "paid",
@@ -319,7 +325,9 @@ request(options, function (error, response, body) {
             "inserted_at": "2018-11-28T19:44:21.874251",
             "id": "2c84ae4a-962c-479b-bed4-4696ef25099d",
             "currency": "USD",
-            "amount": 241.87
+            "amount": 241.87,
+            "fee": 12.39,
+            "customer_fee_amount": 0.0
         },
         // ...
     ],
