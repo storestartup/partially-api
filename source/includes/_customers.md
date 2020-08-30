@@ -211,6 +211,7 @@ shipto_city | string | no | | city
 shipto_state | string | no | | 2 letter state/province/region code
 shipto_country | string | no | US | 2 letter country code
 shipto_postal_code | string | no | | ZIP/postal code
+password | string | no | | if a new user is being created, use the supplied password. Otherwise a random password will be generated
 
 ## Update a customer
 
@@ -428,7 +429,7 @@ curl "https://partial.ly/api/customer/login_token" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
-  --data '{"token": "N5E9gL"}'
+  --data '{"token": "N5E9gL", "email": "aaa@y.co"}'
 ```
 
 ```javascript
@@ -442,7 +443,8 @@ var options = {
   method: 'POST',
   json: true,
   body: {
-    token: 'N5E9gL'
+    token: 'N5E9gL',
+    email: 'aaa@y.co'
   }
 };
 
@@ -480,3 +482,4 @@ Authenticate a customer with a token generated from the [email a login token](#e
 Parameter | Type | Required
 --------- | -----------  | --------
 token |  string | yes
+email | string | yes
