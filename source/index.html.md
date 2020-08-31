@@ -30,7 +30,7 @@ search: true
 The Partial.ly API allows you to programmatically access the data in your Partial.ly merchant account and create payment plans and payments.
 The API is currently in beta mode, so there may be minor changes. If you have feedback we would love to hear it.
 
-Our API follows REST principles and accepts and returns all data in [JSON](http://www.json.org/) format. POST and PUT data must be JSON encoded, and must have the `Content-Type: application/json` HTTP header.
+Our API follows REST principles and accepts and returns all data in [JSON](http://www.json.org/) format. All requests must include the `Accept: application/json` HTTP header present. POST and PUT data must be JSON encoded, and must have the `Content-Type: application/json` HTTP header.
 The base URL for all API calls is **https://partial.ly/api**.
 
 We also have a staging server at demo.partial.ly, so if you want to test your integration please use the base URL **https://demo.partial.ly/api**. Note that you will have to register for a separate account here than your live Partial.ly account.
