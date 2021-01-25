@@ -214,7 +214,7 @@ auto_process | boolean | no | true | true to automatically schedule future payme
 payment_schedule_description | string | no | | for manual payment plans, a description of the payment schedule
 currency | string | no | currency in merchant settings | The currency to use for payment plans
 down_payment | decimal | no | 0 | the amount or percent of down payment required, depending on down_payment_type
-down_payment_type | string | no | percent | percent or amount
+down_payment_type | string | no | percent | "percent" for a percent of the payment plan subtotal or "fixed" for a fixed amount
 down_payment_flexible | boolean | no | false | allow the customer to choose their down payment within a specified range
 down_payment_min | decimal | no | | min down payment percent or amount
 down_payment_max | decimal | no | | max down payment percent or amount
