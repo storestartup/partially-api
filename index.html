@@ -2301,6 +2301,8 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Opens a payment plan by signing the customer contract, attaching a payment method (new or existing), and processing the down payment if there is one. Only payment plans in <em>checkout</em> or <em>pending</em> status can be opened.</p>
+
+<p>In case the supplied payment method requires 3d secure authentication (required for <a href="https://stripe.com/payments/strong-customer-authentication">Strong Customer Authentication</a>), the resulting payment plan will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request-2'>HTTP request</h3>
 <p><code>PUT /payment_plan/open/:id</code></p>
 
@@ -2349,6 +2351,12 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>string</td>
 <td>no</td>
 <td></td>
+</tr>
+<tr>
+<td>return_url</td>
+<td>string</td>
+<td>no</td>
+<td>your URL to redirect user to after 3d secure authentication</td>
 </tr>
 </tbody></table>
 <h2 id='cancel-a-payment-plan'>Cancel a payment plan</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c"</span> <span class="se">\</span>
@@ -3189,6 +3197,8 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 This step does not actually process
 the payment, but instead returns the adjusted payment schedule,
 installments, and contract for the customer to sign. Which is completed in the <a href="#confirm-a-payment">Confirm a payment</a> step</p>
+
+<p>In case the supplied payment method requires 3d secure authentication (required for <a href="https://stripe.com/payments/strong-customer-authentication">Strong Customer Authentication</a>), the resulting payment will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>POST /payment/create</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -3211,6 +3221,12 @@ installments, and contract for the customer to sign. Which is completed in the <
 <td>decimal</td>
 <td>yes</td>
 <td>amount of the payment</td>
+</tr>
+<tr>
+<td>return_url</td>
+<td>string</td>
+<td>no</td>
+<td>your URL to redirect user to after 3d secure authentication</td>
 </tr>
 </tbody></table>
 <h2 id='confirm-a-payment'>Confirm a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/confirm"</span> <span class="se">\</span>
@@ -3262,6 +3278,8 @@ installments, and contract for the customer to sign. Which is completed in the <
 </span></code></pre>
 <p>step 2 in making a payment on a payment plan, adjusting future installments
 signs the updated payment schedule contract from the create step and processes the payment</p>
+
+<p>In case the supplied payment method requires 3d secure authentication, the resulting payment will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>POST /payment/confirm</code></p>
 <h3 id='parameters-2'>Parameters</h3>
@@ -3290,6 +3308,12 @@ signs the updated payment schedule contract from the create step and processes t
 <td>string</td>
 <td>yes</td>
 <td>the customer&#39;s signature for the new payment schedule contract</td>
+</tr>
+<tr>
+<td>return_url</td>
+<td>string</td>
+<td>no</td>
+<td>your URL to redirect user to after 3d secure authentication</td>
 </tr>
 </tbody></table>
 <h2 id='list-all-payments'>List all payments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment"</span> <span class="se">\</span>
@@ -3816,8 +3840,26 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Pays a scheduled installment. Must be scheduled in the future and not already paid. If successful will return the payment.</p>
+
+<p>In case the supplied payment method requires 3d secure authentication, the resulting payment will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>PUT /installment/pay/:id</code></p>
+<h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>return_url</td>
+<td>string</td>
+<td>no</td>
+<td>your URL to redirect user to after 3d secure authentication</td>
+</tr>
+</tbody></table>
 <h2 id='list-installments'>List installments</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
