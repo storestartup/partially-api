@@ -49,9 +49,16 @@ request(options, function (error, response, payment) {
 
 Pays a scheduled installment. Must be scheduled in the future and not already paid. If successful will return the payment.
 
+In case the supplied payment method requires 3d secure authentication, the resulting payment will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
+
 ### HTTP request
 
 `PUT /installment/pay/:id`
+
+### Parameters
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## List installments
 

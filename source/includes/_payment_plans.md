@@ -244,6 +244,8 @@ request(options, function (error, response, payment_plan) {
 
 Opens a payment plan by signing the customer contract, attaching a payment method (new or existing), and processing the down payment if there is one. Only payment plans in *checkout* or *pending* status can be opened.
 
+In case the supplied payment method requires 3d secure authentication (required for [Strong Customer Authentication](https://stripe.com/payments/strong-customer-authentication)), the resulting payment plan will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
+
 ### HTTP request
 
 `PUT /payment_plan/open/:id`
@@ -260,6 +262,7 @@ payment_method.type | string | no | card or bank_account, required if payment_me
 payment_method.token_id | string | no | see [Payment Methods] for details on creating new payment methods
 payment_method.account_id | string | no |
 payment_method.public_token | string | no |
+return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## Cancel a payment plan
 

@@ -187,6 +187,8 @@ This step does not actually process
 the payment, but instead returns the adjusted payment schedule,
 installments, and contract for the customer to sign. Which is completed in the [Confirm a payment](#confirm-a-payment) step
 
+In case the supplied payment method requires 3d secure authentication (required for [Strong Customer Authentication](https://stripe.com/payments/strong-customer-authentication)), the resulting payment will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
+
 ### HTTP Request
 
 `POST /payment/create`
@@ -196,6 +198,7 @@ Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 payment_plan_id | string | yes | id of the plan to make a payment on
 amount | decimal | yes | amount of the payment
+return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## Confirm a payment
 
@@ -255,6 +258,8 @@ request(options, function (error, response, payment) {
 step 2 in making a payment on a payment plan, adjusting future installments
 signs the updated payment schedule contract from the create step and processes the payment
 
+In case the supplied payment method requires 3d secure authentication, the resulting payment will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
+
 ### HTTP Request
 
 `POST /payment/confirm`
@@ -265,6 +270,7 @@ Parameter | Type | Required | Description
 payment_plan_id | string | yes | id of the plan to make a payment on
 amount | decimal | yes | amount of the payment
 contract_signature | string | yes | the customer's signature for the new payment schedule contract
+return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## List all payments
 
