@@ -298,7 +298,7 @@ request(options, function (error, response, body) {
 }
 ```
 
-Cancels an payment plan. Only payment plans in *open* or *pending* status may be canceled
+Cancels a payment plan. Only payment plans in *open* or *pending* status may be canceled
 
 ### HTTP Request
 
