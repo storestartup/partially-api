@@ -528,6 +528,22 @@ request(options, function (error, response, plan) {
         "inserted_at": "2018-11-28T17:13:14.181300",
         "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
         "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+        "customer": {
+            "timezone": "America/New_York",
+            "shipto_state": "FL",
+            "shipto_postal_code": "33601",
+            "shipto_name": "Sample Customer",
+            "shipto_country": "US",
+            "shipto_city": "Tampa",
+            "shipto_address2": null,
+            "shipto_address": "123 N. Tampa St.",
+            "phone": "81325551212",
+            "last_name": "Customer",
+            "inserted_at": "2015-09-11T05:54:27.000000",
+            "id": "6d30d3c8-d024-45cc-9c3f-356fc8aee23d",
+            "first_name": "Sample",
+            "email": "sample.customer@gmail.com"
+        },
         "currency": "USD",
         "balance": 518.49,
         "amount_refunded": 5.99,
@@ -672,9 +688,86 @@ request(options, function (error, response, body) {
             "inserted_at": "2018-11-28T17:13:14.181300",
             "id": "8f999efe-5798-4b51-a6c5-d21b0d04124b",
             "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+            "customer": {
+                "timezone": "America/New_York",
+                "shipto_state": "FL",
+                "shipto_postal_code": "33601",
+                "shipto_name": "Sample Customer",
+                "shipto_country": "US",
+                "shipto_city": "Tampa",
+                "shipto_address2": null,
+                "shipto_address": "123 N. Tampa St.",
+                "phone": "81325551212",
+                "last_name": "Customer",
+                "inserted_at": "2015-09-11T05:54:27.000000",
+                "id": "6d30d3c8-d024-45cc-9c3f-356fc8aee23d",
+                "first_name": "Sample",
+                "email": "sample.customer@gmail.com"
+            },
             "currency": "USD",
             "amount_paid": 256.25,
-            "amount": 1025
+            "amount": 1025,
+            "line_items": [
+              {
+                  "quantity": 1,
+                  "meta": {
+                      "quantity": 1,
+                      "price": 900,
+                      "name": "Widget",
+                      "id": "widget-id"
+                  },
+                  "inserted_at": "2018-11-28T17:13:14.262856",
+                  "id": "0da61119-ca96-410b-a1cb-ca059f2f8395",
+                  "dynamic_type": "generic",
+                  "dynamic": false,
+                  "description": "Widget",
+                  "amount": 900
+              }
+            ],
+            "payment_schedule": {
+                "term_units": "months",
+                "term": 3,
+                "starts_date": null,
+                "starts_auto": true,
+                "repay_by_date": "2019-02-28",
+                "payment_amount": 256.25,
+                "num_payments": 3,
+                "inserted_at": "2018-11-28T17:13:14.235119",
+                "id": "1f5d9716-a041-47ef-8c57-86af22efa31c",
+                "frequency_units": "months",
+                "frequency": 1,
+                "down_payment_amount": 256.25,
+                "description": null,
+                "contract_signed_date": "2018-11-28T18:27:17",
+                "contract_signature": "Customer Signature",
+                "contract_body": "By submitting your order and authorizing...",
+                "balance": 768.75,
+                "auto_process": true,
+                "amount": 1025,
+                "installments": [
+                    {
+                        "scheduled": "2018-12-28T18:27:16.910618",
+                        "retry_number": 0,
+                        "inserted_at": "2018-11-28T18:27:16.911366",
+                        "id": "6a85b229-69e6-4850-8309-edf7bfc3cec1",
+                        "amount": 256.25
+                    },
+                    {
+                        "scheduled": "2019-01-28T18:27:16.910618",
+                        "retry_number": 0,
+                        "inserted_at": "2018-11-28T18:27:16.927898",
+                        "id": "0caa4d95-2252-4855-8f78-a0ecf426bf09",
+                        "amount": 256.25
+                    },
+                    {
+                        "scheduled": "2019-02-28T18:27:16.910618",
+                        "retry_number": 0,
+                        "inserted_at": "2018-11-28T18:27:16.931100",
+                        "id": "7a6c0aba-1b55-43dc-8367-d7fada4f1bfa",
+                        "amount": 256.25
+                    }
+                ]
+            }
         }
     ],
     "page_size": 10,
