@@ -139,7 +139,7 @@ When testing with our test server, set the plaid env to `sandbox`, otherwise set
 
 ### HTTP Request
 
-`GET /payment_method`
+`POST /payment_method`
 
 ### Parameters
 
