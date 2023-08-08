@@ -2961,9 +2961,25 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
     </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Plan request email sent"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending status</p>
+<p>Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending, canceled, defaulted, or paused status, and the merchant account must have an active Stripe account connected. </p>
+
+<p>You can optionally choose to also update the payment plan status to pending, which will also allow the customer to open the payment plan from their portal.</p>
 <h3 id='http-request-7'>HTTP Request</h3>
 <p><code>POST /payment_plan/send_plan_request/:id</code></p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>update_status</td>
+<td>string</td>
+<td>can only be updated to <code>&quot;pending&quot;</code></td>
+</tr>
+</tbody></table>
 <h1 id='line-items'>Line Items</h1><h2 id='create-a-line-item'>Create a line item</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/line_item"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
