@@ -504,6 +504,7 @@ request(options, function (error, response, plan) {
         "subtotal": 1000,
         "status": "open",
         "number": 140,
+        "offer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
         "meta": {
             "items": [
                 {
@@ -664,6 +665,7 @@ request(options, function (error, response, body) {
             "subtotal": 1000,
             "status": "open",
             "number": 140,
+            "offer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
             "meta": {
                 "items": [
                     {
@@ -829,8 +831,14 @@ request(options, function (error, response, body) {
 }
 ```
 
-Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending status
+Send an emailed request to the customer to open the payment plan via Partially checkout. The payment plan must be in pending, canceled, defaulted, or paused status, and the merchant account must have an active Stripe account connected. 
+
+You can optionally choose to also update the payment plan status to pending, which will also allow the customer to open the payment plan from their portal.
 
 ### HTTP Request
 
 `POST /payment_plan/send_plan_request/:id`
+
+Parameter | Type | Description
+--------- | -----------  | --------
+update_status | string | can only be updated to `"pending"`
