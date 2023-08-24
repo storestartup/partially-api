@@ -258,10 +258,8 @@ Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 payment_schedule.contract_signature | string | yes | customer's signature
 payment_method.id | string | no | existing payment method id
-payment_method.type | string | no | card or bank_account, required if payment_method.id not sent
-payment_method.token_id | string | no | see [Payment Methods] for details on creating new payment methods
-payment_method.account_id | string | no |
-payment_method.public_token | string | no |
+payment_method.type | string | no | "card", required if payment_method.id not sent
+payment_method.token_id | string | no | see [Payment Methods](#payment-methods) for details on creating new payment methods
 return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## Cancel a payment plan

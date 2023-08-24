@@ -1,6 +1,6 @@
 # Payment Methods
 
-A saved payment method attached to a customer. May be any type of credit or debit card, or a bank account for supported US based customers.
+A saved payment method attached to a customer. May be any type of credit or debit card.
 
 ## Create payment method
 
@@ -94,31 +94,6 @@ form.addEventListener('submit', function() {
 </script>
 ```
 
-> Example HTML to capture bank account details with Plaid
-
-```html
-<a href="#" id="addBankAccount">Add bank account</a>
-<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-<script>
-var linkHandler = Plaid.create({
-  env: 'production',
-  clientName: 'Partial.ly',
-  key: '5763eb087a2251e8bf13f1b53b9ab8',
-  product: 'auth',
-  selectAccount: true,
-  apiVersion: 'v2',
-  onSuccess: function(public_token, meta) {
-    // send public_token to Partial.ly
-    // send meta.account.id to Partial.ly in account_id parameter
-  }
-});
-
-document.getElementById('addBankAccount').onclick = function() {
-  linkHandler.open();
-};
-</script>
-```
-
 Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with [Stripe.js](https://stripe.com/docs/stripe-js) before being sent to Partial.ly.
 
 When creating your Stripe.js object, use the following public key to initialize the Stripe SDK
@@ -129,14 +104,6 @@ When testing with our [Partial.ly test server](https://demo.partial.ly), use the
 
 `pk_test_eV3vdXbE4SrfLjJYn9XUSUwx`
 
-To create bank account payment methods for US based customers, you must use [Plaid Link](https://plaid.com/docs/quickstart/)
-
-When setting up Plaid, use the following public key to initialize the Plaid SDK.
-
-`5763eb087a2251e8bf13f1b53b9ab8`
-
-When testing with our test server, set the plaid env to `sandbox`, otherwise set the plaid env to `production`
-
 ### HTTP Request
 
 `GET /payment_method`
@@ -146,10 +113,8 @@ When testing with our test server, set the plaid env to `sandbox`, otherwise set
 Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 customer_id | string | yes | id of customer to associate with
-type | string | yes | card or bank_account
-token_id | string | no | the token id returned from Stripe.js. Required for card type
-public_token | string | no | token returned from Plaid. Required for bank_account type
-account_id | string | no | account id returned from Plaid. Required for bank_account type
+type | string | yes | "card"
+token_id | string | no | the token id returned from Stripe.js. Required for "card" type
 
 ## List payment methods
 
