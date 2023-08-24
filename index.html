@@ -1668,7 +1668,7 @@ but all personally identifiable customer information will be anonymized. If the 
 </tr>
 </tbody></table>
 <h1 id='payment-methods'>Payment Methods</h1>
-<p>A saved payment method attached to a customer. May be any type of credit or debit card, or a bank account for supported US based customers.</p>
+<p>A saved payment method attached to a customer. May be any type of credit or debit card.</p>
 <h2 id='create-payment-method'>Create payment method</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
@@ -1752,30 +1752,6 @@ but all personally identifiable customer information will be anonymized. If the 
 <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre>
-<blockquote>
-<p>Example HTML to capture bank account details with Plaid</p>
-</blockquote>
-<pre class="highlight html tab-html"><code><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">id=</span><span class="s">"addBankAccount"</span><span class="nt">&gt;</span>Add bank account<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.plaid.com/link/v2/stable/link-initialize.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script&gt;</span>
-<span class="kd">var</span> <span class="nx">linkHandler</span> <span class="o">=</span> <span class="nx">Plaid</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span>
-  <span class="na">env</span><span class="p">:</span> <span class="s1">'production'</span><span class="p">,</span>
-  <span class="na">clientName</span><span class="p">:</span> <span class="s1">'Partial.ly'</span><span class="p">,</span>
-  <span class="na">key</span><span class="p">:</span> <span class="s1">'5763eb087a2251e8bf13f1b53b9ab8'</span><span class="p">,</span>
-  <span class="na">product</span><span class="p">:</span> <span class="s1">'auth'</span><span class="p">,</span>
-  <span class="na">selectAccount</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="na">apiVersion</span><span class="p">:</span> <span class="s1">'v2'</span><span class="p">,</span>
-  <span class="na">onSuccess</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">public_token</span><span class="p">,</span> <span class="nx">meta</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// send public_token to Partial.ly</span>
-    <span class="c1">// send meta.account.id to Partial.ly in account_id parameter</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'addBankAccount'</span><span class="p">).</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">linkHandler</span><span class="p">.</span><span class="nx">open</span><span class="p">();</span>
-<span class="p">};</span>
-<span class="nt">&lt;/script&gt;</span>
-</code></pre>
 <p>Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with <a href="https://stripe.com/docs/stripe-js">Stripe.js</a> before being sent to Partial.ly.</p>
 
 <p>When creating your Stripe.js object, use the following public key to initialize the Stripe SDK</p>
@@ -1785,14 +1761,6 @@ but all personally identifiable customer information will be anonymized. If the 
 <p>When testing with our <a href="https://demo.partial.ly">Partial.ly test server</a>, use the following public key</p>
 
 <p><code>pk_test_eV3vdXbE4SrfLjJYn9XUSUwx</code></p>
-
-<p>To create bank account payment methods for US based customers, you must use <a href="https://plaid.com/docs/quickstart/">Plaid Link</a></p>
-
-<p>When setting up Plaid, use the following public key to initialize the Plaid SDK.</p>
-
-<p><code>5763eb087a2251e8bf13f1b53b9ab8</code></p>
-
-<p>When testing with our test server, set the plaid env to <code>sandbox</code>, otherwise set the plaid env to <code>production</code></p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET /payment_method</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -1814,25 +1782,13 @@ but all personally identifiable customer information will be anonymized. If the 
 <td>type</td>
 <td>string</td>
 <td>yes</td>
-<td>card or bank_account</td>
+<td>&quot;card&quot;</td>
 </tr>
 <tr>
 <td>token_id</td>
 <td>string</td>
 <td>no</td>
-<td>the token id returned from Stripe.js. Required for card type</td>
-</tr>
-<tr>
-<td>public_token</td>
-<td>string</td>
-<td>no</td>
-<td>token returned from Plaid. Required for bank_account type</td>
-</tr>
-<tr>
-<td>account_id</td>
-<td>string</td>
-<td>no</td>
-<td>account id returned from Plaid. Required for bank_account type</td>
+<td>the token id returned from Stripe.js. Required for &quot;card&quot; type</td>
 </tr>
 </tbody></table>
 <h2 id='list-payment-methods'>List payment methods</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"</span> <span class="se">\</span>
@@ -2332,25 +2288,13 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>payment_method.type</td>
 <td>string</td>
 <td>no</td>
-<td>card or bank_account, required if payment_method.id not sent</td>
+<td>&quot;card&quot;, required if payment_method.id not sent</td>
 </tr>
 <tr>
 <td>payment_method.token_id</td>
 <td>string</td>
 <td>no</td>
-<td>see [Payment Methods] for details on creating new payment methods</td>
-</tr>
-<tr>
-<td>payment_method.account_id</td>
-<td>string</td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>payment_method.public_token</td>
-<td>string</td>
-<td>no</td>
-<td></td>
+<td>see <a href="#payment-methods">Payment Methods</a> for details on creating new payment methods</td>
 </tr>
 <tr>
 <td>return_url</td>
