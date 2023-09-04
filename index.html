@@ -852,6 +852,34 @@ You must replace <code>your_api_key</code> with your personal API key.
 <td></td>
 <td>the maximum payment frequency the customer can choose</td>
 </tr>
+<tr>
+<td>starts_auto</td>
+<td>boolean</td>
+<td>no</td>
+<td>false</td>
+<td>whether or not the first installment should automatically be scheduled relative to the date plan was opened</td>
+</tr>
+<tr>
+<td>starts_date</td>
+<td>date</td>
+<td>no</td>
+<td></td>
+<td>when starts_auto is false, use this date as the first scheduled installment date</td>
+</tr>
+<tr>
+<td>starts_date_flexible</td>
+<td>boolean</td>
+<td>no</td>
+<td>false</td>
+<td>allow the customer to choose their first payment date</td>
+</tr>
+<tr>
+<td>starts_date_max_days</td>
+<td>integer</td>
+<td>no</td>
+<td></td>
+<td>the maximum payment frequency the customer can choose</td>
+</tr>
 </tbody></table>
 <h2 id='update-an-offer'>Update an offer</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
