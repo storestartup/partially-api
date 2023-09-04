@@ -230,6 +230,10 @@ frequency_days | array | no | | array of specific days of the month for payments
 frequency_flexible | boolean | no | false | allow the customer to choose their payment frequency within the specified range
 frequency_min | integer | no | | the minimum payment frequency the customer can choose
 frequency_max | integer | no | | the maximum payment frequency the customer can choose  
+starts_auto | boolean | no | false | whether or not the first installment should automatically be scheduled relative to the date plan was opened
+starts_date | date | no | | when starts_auto is false, use this date as the first scheduled installment date
+starts_date_flexible | boolean | no | false | allow the customer to choose their first payment date
+starts_date_max_days | integer | no | | the maximum payment frequency the customer can choose
 
 ## Update an offer
 
