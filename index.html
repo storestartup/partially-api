@@ -359,6 +359,9 @@
                   <li>
                     <a href="#list-all-payments" class="toc-h2 toc-link" data-title="List all payments">List all payments</a>
                   </li>
+                  <li>
+                    <a href="#retrieve-a-payment" class="toc-h2 toc-link" data-title="Retrieve a payment">Retrieve a payment</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -3508,6 +3511,85 @@ signs the updated payment schedule contract from the create step and processes t
 <td>payments with the given customer id</td>
 </tr>
 </tbody></table>
+<h2 id='retrieve-a-payment'>Retrieve a payment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">52.5</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"charge_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"direct"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"customer_fee_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.05</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b1873714-bb39-4b07-ac54-10501a60c98a"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-06-11T14:39:20Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"paid_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-06-11T14:41:28Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_method"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ee067511-2028-40e0-855d-50420dda6fcb"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-02-17T21:32:51Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"checks"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"address_line1_check"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"address_postal_code_check"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pass"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"cvc_check"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pass"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"display_brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_month"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_year"</span><span class="p">:</span><span class="w"> </span><span class="mi">2026</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fingerprint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nSxT4fpABgc4m4xm"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"funding"</span><span class="p">:</span><span class="w"> </span><span class="s2">"credit"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"generated_from"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last4"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4242"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"networks"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"available"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"visa"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="s2">"preferred"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"three_d_secure_usage"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"supported"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"wallet"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5f179a30-264f-41d2-84bf-f62f2e1870d4"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processor_destination_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pi_2PQVr02J8rf5dfhT1nbObkMv"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"down_merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"customer@google.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b2cb785c-6230-414e-ab43-311f8baf97ed"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-06T04:46:42Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Get a single payment by id</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>GET /payment/:id</code> replace :id with the id of the payment</p>
 <h1 id='payment-schedules'>Payment Schedules</h1>
 <p>A payment schedule represents the terms and schedule for a payment plan. A payment plan can have multiple payment schedules if the customer makes a one off payment that adjusts the current payment schedule. A payment plan only has one active payment schedule  </p>
 <h2 id='update-a-payment-schedule'>Update a payment schedule</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341"</span> <span class="se">\</span>
