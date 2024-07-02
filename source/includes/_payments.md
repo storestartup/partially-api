@@ -359,3 +359,93 @@ currency | string | 3 letter currency code
 date | date | payment created date. YYYY-MM-DD
 dateRange | string | payments created in a range of dates separated by the &#124; character. Ex. use "2018-01-01&#124;2018-02-01"
 customer | string | payments with the given customer id
+
+## Retrieve a payment
+
+```shell
+curl "https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a" \
+  -H "Authorization: Bearer your_api_key"
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "amount": 52.5,
+    "charge_type": "direct",
+    "currency": "USD",
+    "customer_fee_amount": 0.0,
+    "fee": 1.05,
+    "id": "b1873714-bb39-4b07-ac54-10501a60c98a",
+    "inserted_at": "2024-06-11T14:39:20Z",
+    "message": null,
+    "paid_at": "2024-06-11T14:41:28Z",
+    "payment_method": {
+        "id": "ee067511-2028-40e0-855d-50420dda6fcb",
+        "inserted_at": "2024-02-17T21:32:51Z",
+        "integration_details": {
+            "brand": "visa",
+            "checks": {
+                "address_line1_check": null,
+                "address_postal_code_check": "pass",
+                "cvc_check": "pass"
+            },
+            "country": "US",
+            "display_brand": "visa",
+            "exp_month": 11,
+            "exp_year": 2026,
+            "fingerprint": "nSxT4fpABgc4m4xm",
+            "funding": "credit",
+            "generated_from": null,
+            "last4": "4242",
+            "networks": {
+                "available": [
+                    "visa"
+                ],
+                "preferred": null
+            },
+            "three_d_secure_usage": {
+                "supported": true
+            },
+            "wallet": null
+        },
+        "type": "card"
+    },
+    "payment_plan_id": "5f179a30-264f-41d2-84bf-f62f2e1870d4",
+    "processor": "stripe",
+    "processor_destination_id": null,
+    "processor_id": "pi_2PQVr02J8rf5dfhT1nbObkMv",
+    "redirect_url": null,
+    "retry_number": 0,
+    "status": "paid",
+    "type": "down_merchant",
+    "user": {
+        "email": "customer@google.com",
+        "id": "b2cb785c-6230-414e-ab43-311f8baf97ed",
+        "inserted_at": "2017-09-06T04:46:42Z"
+    }
+}
+```
+
+Get a single payment by id
+
+### HTTP Request
+
+`GET /payment/:id` replace :id with the id of the payment
