@@ -102,6 +102,68 @@ Gets all webhooks
 ### HTTP request
 `GET /webhook`
 
+## Update a webhook
+
+```shell
+curl "https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
+  -X PUT \
+  --data '{"url": "http://localhost:8888/hook"}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT',
+  json: true,
+  body: {
+    url: 'http://localhost:8888/hook'
+  }
+};
+
+request(options, function (error, response, webhook) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "version": "2.0",
+    "url": "http://localhost:8888/hook",
+    "updated_at": "2018-11-28T22:22:06.355439",
+    "merchant_id": "60689b2d-d391-417e-9f59-7b65e3e50d8d",
+    "inserted_at": "2018-11-28T22:22:06.355432",
+    "id": "d5e43bed-041c-4ff4-b422-a401b10aad79",
+    "event": "*",
+    "active": true
+}
+```
+
+Updates an existing webhook
+
+### HTTP request
+
+`PUT /webhook/:id`
+
+*replace :id with the id of the webhook to update*
+
+### Parameters
+Parameter | Type | Required | Description
+--------- | -----------  | -------- | ------
+url | string | no | complete URL of the webhook, including https
+event | string | no | the event to subscribe to, or * for all events (default)
+active | boolean | no | whether or not the webhook is active
+
 ## Delete a webhook
 
 ```shell
