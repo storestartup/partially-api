@@ -6,7 +6,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript: Node
 
 toc_footers:
-  - <a href='https:/partial.ly/merchant'>Partial.ly Merchant Portal</a>
+  - <a href='https://partial.ly/merchant'>Partial.ly Merchant Portal</a>
 
 includes:
   - offers
