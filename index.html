@@ -210,7 +210,9 @@
     </a>
     <div class="toc-wrapper">
       <div id="logo-wrap">
+        <a href="https://partial.ly">
         <img src="images/logo.png" class="logo" alt="Logo" />
+        </a>
       </div>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
@@ -412,22 +414,55 @@
             <a href="#webhooks" class="toc-h1 toc-link" data-title="Webhooks">Webhooks</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#create-a-webhook" class="toc-h2 toc-link" data-title="Create a webhook">Create a webhook</a>
+                    <a href="#webhooks-overview" class="toc-h2 toc-link" data-title="Webhooks overview">Webhooks overview</a>
                   </li>
                   <li>
-                    <a href="#list-webhooks" class="toc-h2 toc-link" data-title="List webhooks">List webhooks</a>
+                    <a href="#create-a-webhook-listener" class="toc-h2 toc-link" data-title="Create a webhook listener">Create a webhook listener</a>
                   </li>
                   <li>
-                    <a href="#update-a-webhook" class="toc-h2 toc-link" data-title="Update a webhook">Update a webhook</a>
+                    <a href="#list-webhook-listeners" class="toc-h2 toc-link" data-title="List webhook listeners">List webhook listeners</a>
                   </li>
                   <li>
-                    <a href="#delete-a-webhook" class="toc-h2 toc-link" data-title="Delete a webhook">Delete a webhook</a>
+                    <a href="#update-a-webhook-listener" class="toc-h2 toc-link" data-title="Update a webhook listener">Update a webhook listener</a>
+                  </li>
+                  <li>
+                    <a href="#delete-a-webhook-listener" class="toc-h2 toc-link" data-title="Delete a webhook listener">Delete a webhook listener</a>
+                  </li>
+                  <li>
+                    <a href="#webhook-events" class="toc-h2 toc-link" data-title="Webhook events">Webhook events</a>
+                  </li>
+                  <li>
+                    <a href="#plan_opened-event" class="toc-h2 toc-link" data-title="plan_opened event">plan_opened event</a>
+                  </li>
+                  <li>
+                    <a href="#plan_paid-event" class="toc-h2 toc-link" data-title="plan_paid event">plan_paid event</a>
+                  </li>
+                  <li>
+                    <a href="#plan_defaulted-event" class="toc-h2 toc-link" data-title="plan_defaulted event">plan_defaulted event</a>
+                  </li>
+                  <li>
+                    <a href="#payment_succeeded-event" class="toc-h2 toc-link" data-title="payment_succeeded event">payment_succeeded event</a>
+                  </li>
+                  <li>
+                    <a href="#payment_failed-event" class="toc-h2 toc-link" data-title="payment_failed event">payment_failed event</a>
+                  </li>
+                  <li>
+                    <a href="#refund_created-event" class="toc-h2 toc-link" data-title="refund_created event">refund_created event</a>
+                  </li>
+                  <li>
+                    <a href="#dispute_created-event" class="toc-h2 toc-link" data-title="dispute_created event">dispute_created event</a>
+                  </li>
+                  <li>
+                    <a href="#dispute_closed-event" class="toc-h2 toc-link" data-title="dispute_closed event">dispute_closed event</a>
+                  </li>
+                  <li>
+                    <a href="#checkout_abandoned-event" class="toc-h2 toc-link" data-title="checkout_abandoned event">checkout_abandoned event</a>
                   </li>
               </ul>
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='https:/partial.ly/merchant'>Partial.ly Merchant Portal</a></li>
+            <li><a href='https://partial.ly/merchant'>Partial.ly Merchant Portal</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -4335,7 +4370,78 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>disputes with the given customer id</td>
 </tr>
 </tbody></table>
-<h1 id='webhooks'>Webhooks</h1><h2 id='create-a-webhook'>Create a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
+<h1 id='webhooks'>Webhooks</h1><h2 id='webhooks-overview'>Webhooks overview</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// sample server for partial.ly webhooks with signature validation</span>
+<span class="kr">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'crypto'</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">;</span>
+
+<span class="c1">// make sure to validate signature before parsing body</span>
+<span class="kr">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="s1">'sample-key'</span><span class="p">;</span>
+
+<span class="c1">// Middleware to parse the body as raw buffer</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">raw</span><span class="p">({</span> <span class="na">type</span><span class="p">:</span> <span class="s1">'*/*'</span> <span class="p">}));</span>
+
+<span class="c1">// Middleware to validate Partially-Signature header</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">((</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'partially-signature'</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">signature</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">'No signature provided'</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="kr">const</span> <span class="nx">hmac</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s1">'sha256'</span><span class="p">,</span> <span class="nx">apiKey</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">computedSignature</span> <span class="o">=</span> <span class="nx">hmac</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">digest</span><span class="p">(</span><span class="s1">'hex'</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">signature</span> <span class="o">!==</span> <span class="nx">computedSignature</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="s1">'Invalid signature'</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Parse raw body to JSON after signature validation</span>
+  <span class="nx">req</span><span class="p">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+
+  <span class="nx">next</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`partial.ly event </span><span class="p">${</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">event</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">'ok'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">port</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Server is running at http://localhost:</span><span class="p">${</span><span class="nx">port</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">});</span>
+
+</code></pre>
+<p>With our webhook system, when <a href="#webhook-events">key events</a> are triggered in Partial.ly we will deliver the relevant data to any listeners you have configured to receive those events. This allows you to respond to events in real time, such as notifying support, integrating with other systems such as accounting, etc.</p>
+
+<p>All events will be sent over HTTP and JSON encoded, with the following keys:</p>
+
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>event</td>
+<td>the event type, for example plan_opened</td>
+</tr>
+<tr>
+<td>id</td>
+<td>the id of the event</td>
+</tr>
+<tr>
+<td>data</td>
+<td>the data specific to the event</td>
+</tr>
+</tbody></table>
+
+<p>To secure webhook delivery and guarantee events are sent by Partial.ly and unmodified, we will always include the HTTP header <em>Partially-Signature</em> with every webhook event delivered. The value of this header will be the sha-256 <a href="https://en.wikipedia.org/wiki/HMAC">HMAC</a> of the HTTP request body, using your API key as the secret key. You should calculate this value yourself and compare it to the value in the <em>Partially-Signature</em> header to guarantee the security and accuracy of events. Make sure to calculate using the request body before it&#39;s been parsed, as some programming languages may change the order of keys, which could change the value of the signature.</p>
+
+<p>Your webhook listener should return an HTTP 200 status code response within 15 seconds, if not the request is considered failed. If a request fails, we will retry sending it after 1 hour. If there are 20 consecutive failed requests to resend a webhook, it will be automatically disabled.</p>
+
+<p>Webhook listeners can be managed using the API, or through the <a href="https://partial.ly/merchant/settings/webhooks">webhook user interface in the merchant portal</a>.</p>
+<h2 id='create-a-webhook-listener'>Create a webhook listener</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -4373,7 +4479,7 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Creates a new webhook. Events that can be subscribed to are plan_opened, plan_paid, plan_defaulted, payment_succeeded, and payment_failed</p>
+<p>Creates a new webhook listener. Events that can be subscribed to are <a href="#plan_opened">plan_opened</a>, plan_paid, plan_defaulted, plan_canceled, payment_succeeded, payment_failed, refund_created, dispute_created, dispute_closed, and checkout_abandoned.</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>POST /webhook</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -4398,7 +4504,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>the event to subscribe to, or * for all events (default)</td>
 </tr>
 </tbody></table>
-<h2 id='list-webhooks'>List webhooks</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
+<h2 id='list-webhook-listeners'>List webhook listeners</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span>
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
 <span class="c1">// https://github.com/request/request</span>
@@ -4430,10 +4536,10 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
-<p>Gets all webhooks</p>
+<p>Gets all webhook listeners</p>
 <h3 id='http-request-2'>HTTP request</h3>
 <p><code>GET /webhook</code></p>
-<h2 id='update-a-webhook'>Update a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79"</span> <span class="se">\</span>
+<h2 id='update-a-webhook-listener'>Update a webhook listener</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -X PUT <span class="se">\</span>
@@ -4472,7 +4578,7 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Updates an existing webhook</p>
+<p>Updates an existing webhook listener</p>
 <h3 id='http-request-3'>HTTP request</h3>
 <p><code>PUT /webhook/:id</code></p>
 
@@ -4505,7 +4611,7 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>whether or not the webhook is active</td>
 </tr>
 </tbody></table>
-<h2 id='delete-a-webhook'>Delete a webhook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
+<h2 id='delete-a-webhook-listener'>Delete a webhook listener</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c"</span> <span class="se">\</span>
   -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
   -X DELETE
 </code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
@@ -4531,11 +4637,825 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Webhook deleted"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>deletes a webhook</p>
+<p>deletes a webhook listener</p>
 
 <p><code>DELETE /webhook/:id</code></p>
 
 <p><em>replace :id with the id of the webhook to delete</em></p>
+<h2 id='webhook-events'>Webhook events</h2>
+<p>These are the possible event types delivered via webhook, with examples for each.</p>
+<h2 id='plan_opened-event'>plan_opened event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_opened"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">96.78999999999999</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bob@fake.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f4948b98-cef1-49a6-8a8b-3f196f45f917"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-27T14:20:50Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fake"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"345 bayshore blvd"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TAMPA"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob Fake"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f4948b98-cef1-49a6-8a8b-3f196f45f917"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cefab646-aa25-4c03-979a-e4c291288f97"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-05-02T16:04:48Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">416</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8148229a-146c-4abe-8700-8fbe71707046"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">48.39000000000001</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.009999999999990905</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By submitting your order and &lt;em&gt;authorizing&lt;/em&gt; the charges on your card, you are legally bound to the following terms:</span><span class="se">\r\n\r\n</span><span class="s2">I, Bob Fake, acknowledge that I authorize Partial.ly to charge $48.40 USD on behalf of Store Startup today, and  $48.40 USD on the following payment dates:</span><span class="se">\r\n\r\n</span><span class="s2">$48.39 USD on Thursday June 2, 2022</span><span class="se">\r\n\r\n</span><span class="s2">I acknowledge that a total of $96.79 USD USD will be paid to Store Startup by June 2, 2022.</span><span class="se">\r\n\r\n\r\n</span><span class="s2">I &lt;strong&gt;acknowledge&lt;/strong&gt; that the credit card(s) or payment method(s) I am using to make this purchase will be active, valid and have sufficient funds available during the entire term of the payback period. If for any reason my payment is declined, I will provide an alternative, valid payment method.</span><span class="se">\r\n\r\n</span><span class="s2">I understand that I may be assessed a late fee(s) if a payment is missed on any of the agreed-upon payment dates for any reason whatsoever.</span><span class="se">\r\n\r\n</span><span class="s2">I understand that I am legally bound to these terms and required by law to make all payments on the agreed-upon payment dates.</span><span class="se">\r\n\r\n</span><span class="s2">Store Startup reserves the right to report delinquent payments to credit agencies and collections agencies.</span><span class="se">\r\n\r\n</span><span class="s2">"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bilbo Baggins"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-05-02T16:05:40Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">48.4</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days_enabled?"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_days"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d6fd47da-bbfe-41fd-bc63-0d9521716391"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-05-02T16:05:40Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">48.39</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9ae02520-6be2-4fff-9d50-5f0c94f872fc"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-05-02T16:05:40Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-06-02T16:05:03Z"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">48.4</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-06-02"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">96.78999999999999</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a payment plan is opened. Note that this will be sent when a new plan is opened for the first time, as well as when an existing plan is re-opened (a defaulted plan being reopened, for example).</p>
+<h2 id='plan_paid-event'>plan_paid event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_paid"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bob@fake.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-09-12T16:07:44Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fake"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"678-555-1212"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0c9593ff-22b3-4324-a123-919fb7fcca5d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:55:53Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"::ffff:10.182.8.87"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample Design Invoice"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60aed439-473f-48e0-80ef-3a8627dd243a"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ab27241e-eafb-4385-88b0-a488580afb4a"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">3065.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By submitting your order and authorizing the charges on your card, you are legally bound to the following terms:</span><span class="se">\n\n</span><span class="s2">I, Bob Fake, acknowledge that I authorize Partial.ly to charge $200.00 on behalf of Store Startup today, and $510.84 on the following payment dates:</span><span class="se">\n\n</span><span class="s2">$510.84 on October 15th, 2015</span><span class="se">\n\n</span><span class="s2">$510.84 on November 15th, 2015</span><span class="se">\n\n</span><span class="s2">$510.84 on December 15th, 2015</span><span class="se">\n\n</span><span class="s2">$510.84 on January 15th, 2016</span><span class="se">\n\n</span><span class="s2">$510.84 on February 15th, 2016</span><span class="se">\n\n</span><span class="s2">$510.80 on March 15th, 2016</span><span class="se">\n\n</span><span class="s2">I acknowledge that a total of $3,265.00 will be paid to Store Startup by April 15th, 2016.</span><span class="se">\n\n</span><span class="s2">I acknowledge that the credit card(s) or payment method(s) I am using to make this purchase will be active, valid and have sufficient funds available during the entire term of the payback period. If for any reason my payment is declined, I will provide an alternative, valid payment method.</span><span class="se">\n\n</span><span class="s2">I understand that I may be assessed a late fee(s) if a payment is missed on any of the agreed-upon payment dates for any reason whatsoever.</span><span class="se">\n\n</span><span class="s2">I understand that I am legally bound to these terms and required by law to make all payments on the agreed-upon payment dates.</span><span class="se">\n\n</span><span class="s2">Store Startup reserves the right to report delinquent payments to credit agencies and collections agencies."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob Fake"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:55:52Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days_enabled?"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_days"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2f4dd052-8642-48d9-b9b8-92d6e3118473"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:55:53Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"::ffff:10.182.8.87"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">510.84</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-04-15"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>The plan_paid event is triggered when a payment plan is fully paid.</p>
+<h2 id='plan_defaulted-event'>plan_defaulted event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_defaulted"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">21.2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test@testing.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bc8929b8-e0ab-4149-bb13-3159776cdceb"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-10-20T11:25:09Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tester"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12312 "</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bc8929b8-e0ab-4149-bb13-3159776cdceb"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"80be6129-6a26-4330-983c-5f56f1619f72"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-08T20:51:33Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"woocommerce"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample with variants"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6dfae68a-3dbd-4d3b-bd44-48e429c6b2ea"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-08T20:51:33Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"woocommerce"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8e325a79cd78833c32ddd2afa10eec8a"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8e325a79cd78833c32ddd2afa10eec8a"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample with variants"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"67"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abas23423"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lb"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">29</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fe042bc3-336f-4ade-bcdb-77fc1fc0ceb2"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9ecd1a09-0b8d-4d07-bfe6-3c2def0d1b2d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">15.9</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">15.9</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By submitting your order and authorizing the electronic debits from your bank account, you are legally bound to the following terms:</span><span class="se">\r\n\r\n</span><span class="s2">I, Test Tester, acknowledge that I authorize Partial.ly to electronically debit my account  $5.30 on the following payment dates:</span><span class="se">\r\n\r\n</span><span class="s2">$5.30 on Saturday October 14, 2017</span><span class="se">\r\n\r\n</span><span class="s2">$5.30 on Tuesday November 14, 2017</span><span class="se">\r\n\r\n</span><span class="s2">$5.30 on Thursday December 14, 2017</span><span class="se">\r\n\r\n</span><span class="s2">I acknowledge that a total of $21.20 USD will be paid to Store Startup by Thursday December 14, 2017.</span><span class="se">\r\n\r\n\r\n</span><span class="s2">I acknowledge that the credit card(s) or payment method(s) I am using to make this purchase will be active, valid and have sufficient funds available during the entire term of the payback period. If for any reason my payment is declined, I will provide an alternative, valid payment method.</span><span class="se">\r\n\r\n</span><span class="s2">I understand that I may be assessed a late fee(s) if a payment is missed on any of the agreed-upon payment dates for any reason whatsoever.</span><span class="se">\r\n\r\n</span><span class="s2">I understand that I am legally bound to these terms and required by law to make all payments on the agreed-upon payment dates.</span><span class="se">\r\n\r\n</span><span class="s2">Store Startup reserves the right to report delinquent payments to credit agencies and collections agencies.</span><span class="se">\r\n\r\n</span><span class="s2">"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tha merchant"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14T18:13:28Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days_enabled?"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_days"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde89c56-1110-4af8-aa21-04e0731f7617"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14T18:13:24Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.3</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58784b85-c59a-4720-bc8e-f02331b785a6"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14T18:13:28Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-10-14T18:13:28Z"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.3</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d0e8fe1c-bc5d-4ca1-88c8-e079715d2cac"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14T18:13:28Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-11-14T18:13:28Z"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.3</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"30404e14-922b-47d2-80ad-56ffee3f5940"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14T18:13:28Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-12-14T18:13:28Z"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">5.3</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-12-14"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-14"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12312 "</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"defaulted"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">21.2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:55.0) Gecko/20100101 Firefox/55.0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a payment plan status changes to defaulted, which will occurr when the configured number of consecutive scheduled installments have failed (default 3).</p>
+<h2 id='payment_succeeded-event'>payment_succeeded event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment_succeeded"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">510.84</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"charge_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"destination"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer_fee_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">25.84</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4b2f7372-b8ca-47fb-948d-b34a418150ce"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-11-15T12:00:02Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"paid_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-11-15T12:00:02Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12b61a91-9934-453f-9fd0-ad22c343a087"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:36:53Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"American Express"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"exp_month"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"exp_year"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"funding"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"last4"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1111"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bob@fake.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-09-12T16:07:44Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fake"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"678-520-8206"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0c9593ff-22b3-4324-a123-919fb7fcca5d"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:55:53Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"::ffff:10.182.8.87"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample Design Invoice"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60aed439-473f-48e0-80ef-3a8627dd243a"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ab27241e-eafb-4385-88b0-a488580afb4a"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">3265.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0c9593ff-22b3-4324-a123-919fb7fcca5d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor_destination_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ch_177PArEs15StTpSvMeqwLJFr"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a payment suceeds. Note that for certain payment method types, such as bank account, this maybe event may be up to 5 business days after the payment is submit until it&#39;s confirmed.</p>
+<h2 id='payment_failed-event'>payment_failed event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment_failed"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"charge_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"destination"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer_fee_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dcd36f39-0539-40ce-8fce-77709ea05008"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-07-01T15:23:05Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Error from Stripe: The card has insufficient funds"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"paid_at"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b7a7b42a-a693-4fe9-b265-99d304cf3b93"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-08-21T17:56:00Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"American Express"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"exp_month"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"exp_year"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"funding"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"last4"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1111"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">255.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">50.5</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bob@fake.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"452cc42f-d999-4c0f-998b-325c4e0e8f57"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-11-16T16:03:22Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fake"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+18135551212"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"345 bayshore blvd"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TAMPA"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test Customer"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611-4728"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"452cc42f-d999-4c0f-998b-325c4e0e8f57"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34661b40-3fcc-4e65-a156-4c57054527ec"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-08-21T17:46:49Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testing manuel"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">124</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203fb249-b43b-4f9e-a31b-6690a6d8f660"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b7a7b42a-a693-4fe9-b265-99d304cf3b93"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123123"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Test Customer"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">255.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34661b40-3fcc-4e65-a156-4c57054527ec"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor_destination_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a payment fails.</p>
+<h2 id='refund_created-event'>refund_created event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refund_created"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"refund"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">472.19</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"failure_merchant_transfer_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"failure_reason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6e071d81-f030-41db-8511-6aa646f6dc75"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-12-08T16:43:43Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">472.19</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"charge_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"destination"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer_fee_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">23.91</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5266501d-d953-4a1d-82f2-ed67e8a6af09"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-12-08T16:30:57Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"paid_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-12-08T16:30:57Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_method"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12b61a91-9934-453f-9fd0-ad22c343a087"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-09-15T21:36:53Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"American Express"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_month"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_year"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"funding"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last4"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1111"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1888.75</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bob@fake.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bob"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-09-12T16:07:44Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fake"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"678-520-8206"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69acb831-9d4d-4d2c-8cc9-f2e75214aa5b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17c6f090-de95-4e04-9469-32c017567b1d"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-12-08T16:30:57Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"::ffff:10.182.8.87"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Harvest Invoice ID 158"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60aed439-473f-48e0-80ef-3a8627dd243a"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12b61a91-9934-453f-9fd0-ad22c343a087"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"canceled"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">1888.75</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/601.2.7 (KHTML, like Gecko) Version/9.0.1 Safari/601.2.7"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17c6f090-de95-4e04-9469-32c017567b1d"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor_destination_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ch_17FoMeEs15StTpSvpltBMWbg"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"auto"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5266501d-d953-4a1d-82f2-ed67e8a6af09"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"re_17FoZ1Es15StTpSvXcn4uLPp"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"reason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"succeeded"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a refund is created.</p>
+<h2 id='dispute_created-event'>dispute_created event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dispute_created"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"dispute"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">150.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bc1311c5-73db-4ca5-9550-891db55b767d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-07-16T18:02:26Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">150.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"charge_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"destination"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer_fee_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">6.6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"53e64081-659a-4df8-ab8e-7bfb06ec09fa"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-07-16T18:02:23Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"paid_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-07-16T18:02:23Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_method"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b828da1c-58f6-4a87-b870-e04c51f013c6"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-07-16T17:59:07Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"brand"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_month"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"exp_year"</span><span class="p">:</span><span class="w"> </span><span class="mi">2028</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"fingerprint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cTA72UojsYE5ZUqQ"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"funding"</span><span class="p">:</span><span class="w"> </span><span class="s2">"credit"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last4"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">450.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@fake.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fa42b43d-af00-411a-89e1-dc415849652b"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-19T17:55:09Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+15045551212"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 maine Ave"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fa42b43d-af00-411a-89e1-dc415849652b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b86e7f4a-abe9-4541-b42a-4cea49304c4f"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2023-07-16T17:56:37Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">463</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"998f5c9d-b359-42da-a9ac-0a416c819091"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48b5f2ac-e3b6-4c67-8077-bad0eba48bfc"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 main Ave"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"J Doe"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">400.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b86e7f4a-abe9-4541-b42a-4cea49304c4f"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"stripe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor_destination_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"py_1NUZGzJdLv8qpyyQ1jz7ZO1M"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"processor_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pi_3NUZGzEs15StTpSv0xROLwe8"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"manual_admin"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"partiallyadmin@gmail.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3a68691f-27c1-4fca-b618-c08eb56a2c1b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-06T04:46:42Z"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"53e64081-659a-4df8-ab8e-7bfb06ec09fa"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"product_not_received"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"needs_response"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a new dispute is created.</p>
+<h2 id='dispute_closed-event'>dispute_closed event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dispute_closed"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"dispute"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123abc"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"143345"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">50.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@gmail.com"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"234234"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"paid"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unrecognized"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"won"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a dispute is closed, either won or lost.</p>
+<h2 id='checkout_abandoned-event'>checkout_abandoned event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"checkout_abandoned"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.6</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@partial.ly"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"89c25cc8-d94c-45f6-b728-279928aeb3c8"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-07-20T14:51:20Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+18135551212"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 main Ave"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"J Doe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"89c25cc8-d94c-45f6-b728-279928aeb3c8"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"da8c46c5-518c-4a6b-87fb-4878a5b2ed8e"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-08-06T14:59:58Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"woocommerce"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"191"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">250.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The new hotness"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7be7275d-1518-4837-ac9e-ddde24904b2a"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-08-06T14:59:58Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"woocommerce"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The new hotness"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">157</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"250"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lb"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"checkout_cancel_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://wootest.local:8080/cart/?cancel_order=true&amp;order=wc_order_5b68626d9daac&amp;order_id=191&amp;redirect&amp;_wpnonce=0f4253a8fe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"checkout_complete_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://wootest.local:8080/checkout/order-received/191/?key=wc_order_5b68626d9daac"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The new hotness"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">250</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">157</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"250"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fe042bc3-336f-4ade-bcdb-77fc1fc0ceb2"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">206.70000000000002</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">68.9</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days_enabled?"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_days"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weeks"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"26cf43e4-1f19-4058-a7f1-b7ff57726ba4"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-08-06T14:59:58Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">34.46</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-10-29"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-27"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 main ave"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33611"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"checkout"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.6</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WordPress/4.9.3; http://wootest.local:8080"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a Partial.ly checkout is abandoned. The amount of time it takes to triggered this can be configured in your abandoned cart settings in the Partial.ly merchant portal. Note that if the customer hasn&#39;t made it through the customer step of the checkout process by the time the checkout is considered abandoned, this information will be empty in the webhook.</p>
 
       </div>
       <div class="dark-box">
