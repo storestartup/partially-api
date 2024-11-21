@@ -106,7 +106,7 @@ When testing with our [Partial.ly test server](https://demo.partial.ly), use the
 
 ### HTTP Request
 
-`GET /payment_method`
+`POST /payment_method`
 
 ### Parameters
 
