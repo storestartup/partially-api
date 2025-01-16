@@ -378,6 +378,9 @@
                   <li>
                     <a href="#create-a-new-payment-schedule" class="toc-h2 toc-link" data-title="Create a new payment schedule">Create a new payment schedule</a>
                   </li>
+                  <li>
+                    <a href="#add-a-contract-signature" class="toc-h2 toc-link" data-title="Add a contract signature">Add a contract signature</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -457,6 +460,14 @@
                   </li>
                   <li>
                     <a href="#checkout_abandoned-event" class="toc-h2 toc-link" data-title="checkout_abandoned event">checkout_abandoned event</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#examples" class="toc-h1 toc-link" data-title="Examples">Examples</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-your-own-checkout-ui" class="toc-h2 toc-link" data-title="Create your own checkout UI">Create your own checkout UI</a>
                   </li>
               </ul>
           </li>
@@ -1790,48 +1801,71 @@ but all personally identifiable customer information will be anonymized. If the 
     <span class="c">&lt;!-- A Stripe Element will be inserted here. --&gt;</span>
   <span class="nt">&lt;/div&gt;</span>
 
+  <span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;label&gt;</span>Name on card<span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"card-name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
   <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"btnSubmit"</span><span class="nt">&gt;</span>Add Payment Method<span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;/form&gt;</span>
 
 <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://js.stripe.com/v3/"</span><span class="nt">&gt;&lt;/script&gt;</span>
 <span class="nt">&lt;script&gt;</span>
-<span class="c1">// partial.ly public key</span>
+<span class="c1">// partial.ly public test mode key</span>
 <span class="kd">var</span> <span class="nx">publicKey</span> <span class="o">=</span> <span class="s1">'pk_test_eV3vdXbE4SrfLjJYn9XUSUwx'</span><span class="p">,</span>
   <span class="nx">stripe</span> <span class="o">=</span> <span class="nx">Stripe</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">),</span>
   <span class="nx">elements</span> <span class="o">=</span> <span class="nx">stripe</span><span class="p">.</span><span class="nx">elements</span><span class="p">();</span>
 
 <span class="c1">// Create an instance of the card Element.</span>
-<span class="kd">var</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s1">'card'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cardElement</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s1">'card'</span><span class="p">);</span>
 
 <span class="c1">// Add an instance of the card Element into the `card-element` &lt;div&gt;.</span>
-<span class="nx">card</span><span class="p">.</span><span class="nx">mount</span><span class="p">(</span><span class="s1">'#card-element'</span><span class="p">);</span>
+<span class="nx">cardElement</span><span class="p">.</span><span class="nx">mount</span><span class="p">(</span><span class="s1">'#card-element'</span><span class="p">);</span>
 
 <span class="c1">// Handle form submission.</span>
-<span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'payment-form'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'payment-form'</span><span class="p">),</span>
+  <span class="nx">nameElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'card-name'</span><span class="p">);</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'submit'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// tokenize payment data with Stripe</span>
-  <span class="nx">stripe</span><span class="p">.</span><span class="nx">createToken</span><span class="p">(</span><span class="nx">card</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// use Stripe's payment methods api</span>
+  <span class="nx">stripe</span><span class="p">.</span><span class="nx">createPaymentMethod</span><span class="p">({</span>
+    <span class="na">type</span><span class="p">:</span> <span class="s1">'card'</span><span class="p">,</span>
+    <span class="na">card</span><span class="p">:</span> <span class="nx">cardElement</span><span class="p">,</span>
+    <span class="na">billing_details</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="nx">nameElement</span><span class="p">.</span><span class="nx">value</span>
+    <span class="p">}</span>
+  <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">// Inform the user if there was an error.</span>
       <span class="nx">alert</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="c1">// use result.token.id to send in the token_id field to Partial.ly</span>
+      <span class="c1">// get the payment method id from result.paymentMethod.id</span>
+      <span class="c1">// to send to Partially in the stripe_payment_method_id field</span>
+      <span class="c1">//addHiddenField('stripe_payment_method_id', result.paymentMethod.id);</span>
     <span class="p">}</span>
   <span class="p">});</span>
+  <span class="c1">// or, use Stripe's deprecated sources api to create a token</span>
+  <span class="cm">/*
+  stripe.createToken(cardElement).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      alert(result.error.message);
+    } else {
+      // use result.token.id to send in the token_id field to Partial.ly
+    }
+  });
+  */</span>
 <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre>
-<p>Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with <a href="https://stripe.com/docs/stripe-js">Stripe.js</a> before being sent to Partial.ly.</p>
+<p>Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with <a href="https://stripe.com/docs/stripe-js">Stripe.js</a> using the <a href="https://docs.stripe.com/js/element/other_element?type=card">card element</a> before being sent to Partial.ly.</p>
 
-<p>When creating your Stripe.js object, use the following public key to initialize the Stripe SDK</p>
+<p>When creating your Stripe.js object, use the the public key for your Stripe account to initialize the Stripe SDK.</p>
 
-<p><code>pk_live_huSEiMMI7gSK7ORKzZB448xr</code></p>
-
-<p>When testing with our <a href="https://demo.partial.ly">Partial.ly test server</a>, use the following public key</p>
+<p>When testing with our <a href="https://demo.partial.ly">Partial.ly test server</a>, if you do not yet have your own Stripe account you may use the following public key</p>
 
 <p><code>pk_test_eV3vdXbE4SrfLjJYn9XUSUwx</code></p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /payment_method</code></p>
+<p><code>POST /payment_method</code></p>
 <h3 id='parameters'>Parameters</h3>
 <table><thead>
 <tr>
@@ -1851,13 +1885,19 @@ but all personally identifiable customer information will be anonymized. If the 
 <td>type</td>
 <td>string</td>
 <td>yes</td>
-<td>&quot;card&quot;</td>
+<td>only &quot;card&quot; is supported</td>
+</tr>
+<tr>
+<td>stripe_payment_method_id</td>
+<td>string</td>
+<td>yes</td>
+<td>the id of a payment method created from a Stripe card element</td>
 </tr>
 <tr>
 <td>token_id</td>
 <td>string</td>
 <td>no</td>
-<td>the token id returned from Stripe.js. Required for &quot;card&quot; type</td>
+<td>the token id of a source returned from Stripe.js. Deprecated by Stripe in favor of their payment methods api</td>
 </tr>
 </tbody></table>
 <h2 id='list-payment-methods'>List payment methods</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57"</span> <span class="se">\</span>
@@ -2088,10 +2128,13 @@ but all personally identifiable customer information will be anonymized. If the 
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Creates a new payment plan in <em>checkout</em> status. The payment schedule can automatically be created from an offer by sending an <em>offer_id</em> parameter, otherwise a <em>payment_schedule</em> can be specified. Likewise, either a <em>customer_id</em> for an existing customer can be specified, or a customer object can be sent and a new customer will be created, or the existing one attached.
-To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method after it has been created.</p>
+<p>Creates a new payment plan in <em>checkout</em> status. The payment schedule can automatically be created from an offer by sending an <em>offer_id</em> parameter, otherwise a <em>payment_schedule</em> can be specified. Likewise, either a <em>customer_id</em> for an existing customer can be specified, or a customer object can be sent and a new customer will be created, or the existing one attached.</p>
 
 <p>A payment schedule will also be created and associated with the payment plan. The scheduled installments will also be generated and returned, but they will not be stored in the database until the payment plan is opened.</p>
+
+<p>You can set the <code>create_stripe_payment_intent</code> parameter to true and Partially will create a Stripe payment intent, returned in the <code>&quot;payment_intent&quot;</code> key, which you can use to create a <a href="https://docs.stripe.com/payments/payment-element">Stripe payment element</a> to capture customer payment method details in your UI. We have <a href="https://gitlab.com/partially-public/api-checkout-example">an example app</a> demonstrating how to create your own checkout UI using the Partially API and a Stripe payment element.</p>
+
+<p>To open the payment plan with a saved payment method, use the <a href="#open-a-payment-plan">open</a> method after it has been created.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>POST /payment_plan</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -2217,6 +2260,12 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>no</td>
 <td>set to true to send a plan request email to customer to complete checkout. plan must be in pending status</td>
 </tr>
+<tr>
+<td>create_stripe_payment_intent</td>
+<td>boolean</td>
+<td>no</td>
+<td>set to true to create a Stripe payment_intent you can use for a Stripe payment element to capture payment method details in your UI</td>
+</tr>
 </tbody></table>
 <h3 id='line_items'>line_items</h3>
 <table><thead>
@@ -2327,6 +2376,8 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 </span></code></pre>
 <p>Opens a payment plan by signing the customer contract, attaching a payment method (new or existing), and processing the down payment if there is one. Only payment plans in <em>checkout</em> or <em>pending</em> status can be opened.</p>
 
+<p>While you may supply a tokenized source from Stripe in the <code>payment_method.token_id</code> field, Stripe has deprecated the sources API so we recommend instead to create a payment intent when creating the payment plan, which you can use with a Stripe payment element to capture customer payment method details. See the <a href="#">examples</a> section for an overview of the process.</p>
+
 <p>In case the supplied payment method requires 3d secure authentication (required for <a href="https://stripe.com/payments/strong-customer-authentication">Strong Customer Authentication</a>), the resulting payment plan will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request-2'>HTTP request</h3>
 <p><code>PUT /payment_plan/open/:id</code></p>
@@ -2363,7 +2414,7 @@ To open the payment plan, use the <a href="#open-a-payment-plan">open</a> method
 <td>payment_method.token_id</td>
 <td>string</td>
 <td>no</td>
-<td>see <a href="#payment-methods">Payment Methods</a> for details on creating new payment methods</td>
+<td>Stripe tokenized source, deprecated by Stripe in favor of their payment methods api. See <a href="#payment-methods">Payment Methods</a> for details on creating new payment methods</td>
 </tr>
 <tr>
 <td>return_url</td>
@@ -3320,7 +3371,7 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 <p>If the payment is for less than the balance, a new payment schedule will need to be generated and signed by the customer.
 This step does not actually process
 the payment, but instead returns the adjusted payment schedule,
-installments, and contract for the customer to sign. Which is completed in the <a href="#confirm-a-payment">Confirm a payment</a> step</p>
+installments, and contract for the customer to sign, which is completed in the <a href="#confirm-a-payment">Confirm a payment</a> step. You can also <a href="#pay-scheduled-installment">pay a scheduled installment</a>, which will keep the same payment schedule and instead just pay the next scheduled installment.</p>
 
 <p>In case the supplied payment method requires 3d secure authentication (required for <a href="https://stripe.com/payments/strong-customer-authentication">Strong Customer Authentication</a>), the resulting payment will have status &quot;requires_action&quot; and will contain the &quot;redirect_url&quot; key. In this scenario, you should redirect the user to the &quot;redirect_url&quot; to authorize the payment, after which point they will be redirected back to the &quot;return_url&quot; you provide.</p>
 <h3 id='http-request'>HTTP Request</h3>
@@ -4001,6 +4052,87 @@ Can&#39;t be done for open or paid status plans.</p>
 <td>no</td>
 <td></td>
 <td>if starts_auto is false, the specified date will be the date of the first scheduled installment. YYYY-mm-dd</td>
+</tr>
+</tbody></table>
+<h2 id='add-a-contract-signature'>Add a contract signature</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -X PUT <span class="se">\</span>
+  -- data <span class="s1">'{"term": 3}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'PUT'</span><span class="p">,</span>
+  <span class="na">json</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">contract_signature</span><span class="p">:</span> <span class="s1">'John Doe'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-21"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">256.25</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-12-21T22:01:18.623163"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"64823d54-9d47-4cd9-9db0-b293294ca341"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">256.25</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By submitting your order and authorizing the charges on your card..."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">768.75</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1025</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Adds a signature for a payment plan contract which has not yet been signed. Use this when implementing your own checkout UI after the customer has submit the form and before confirming the payment intent with Stripe.</p>
+<h3 id='http-request-4'>HTTP request</h3>
+<p><code>PUT /payment_schedule/sign/:id</code></p>
+<h3 id='parameters-3'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>contract_signature</td>
+<td>string</td>
+<td>yes</td>
+<td>the customer&#39;s signed name</td>
+</tr>
+<tr>
+<td>ip_address</td>
+<td>string</td>
+<td>no</td>
+<td>ip address of the customer, if not provided will default to ip address set on the payment plan</td>
+</tr>
+<tr>
+<td>user_agent</td>
+<td>string</td>
+<td>no</td>
+<td>user agent of customer&#39;s browser, if not provided will default to user agent set on the payment plan</td>
 </tr>
 </tbody></table>
 <h1 id='installments'>Installments</h1>
@@ -5456,6 +5588,18 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Sent when a Partial.ly checkout is abandoned. The amount of time it takes to triggered this can be configured in your abandoned cart settings in the Partial.ly merchant portal. Note that if the customer hasn&#39;t made it through the customer step of the checkout process by the time the checkout is considered abandoned, this information will be empty in the webhook.</p>
+<h1 id='examples'>Examples</h1><h2 id='create-your-own-checkout-ui'>Create your own checkout UI</h2>
+<p>You can create your own user interface for customers to create Partially payment plans using the Partially API and Stripe.js. Doing so involves a few steps, detailed below. We also have a <a href="https://gitlab.com/partially-public/api-checkout-example">sample app</a> implemented in nodejs demonstrating a working example of a custom interface for purchasing tickets with payment plans.</p>
+
+<ol>
+<li><p>Capture customer details. At a minimum, Partially will need a customer&#39;s email address and first and last names.</p></li>
+<li><p>Use the <a href="#create-a-new-payment-plan">create payment plan endpoint</a> to create a new payment plan, making sure to set the <code>create_stripe_payment_intent</code> parameter to <code>true</code>. Doing so will return a Stripe payment intent in the response in the <code>&quot;payment_intent&quot;</code> key of the returned json.</p></li>
+<li><p>Display a form to the user with a <a href="https://docs.stripe.com/payments/payment-element">Stripe payment element</a> to capture payment method details, the payment schedule contract text (available in the response from step 2 in the <code>&quot;payment_schedule.contract_body&quot;</code> key), a checkbox for the customer to agree with the contract terms, and a text input for the customer&#39;s signed name.</p></li>
+<li><p>To initialize the Stripe payment element, you will need the public key for your Stripe account, and the payment intent secret from the intent returned in step 2 (<code>&quot;payment_intent.secret_key&quot;</code>). You will also need to specify a URL for Stripe to redirect users to after confirming the payment intent, which should be your confirmation page.</p></li>
+<li><p>After the user submits the form, call the <a href="#add-a-contract-signature">add contract signature endpoint</a> with the payment schedule id from step 2 and the customer&#39;s signature.</p></li>
+<li><p>After adding the contract signature, use Stripe.js to confirm the payment intent with a <code>stripe.confirmPayment</code> function call.</p></li>
+<li><p>Wait for Partially to send a <code>plan_opened</code> webhook before taking any actions on your server, such as sending confirmation notifications, etc.</p></li>
+</ol>
 
       </div>
       <div class="dark-box">
