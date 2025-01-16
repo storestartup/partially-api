@@ -237,3 +237,74 @@ frequency_min | integer | no | | the minimum payment frequency the customer can 
 frequency_max | integer | no | | the maximum payment frequency the customer can choose
 starts_auto | boolean | no | true | whether or not to automatically schedule the first installment relative to today's date
 starts_date | string | no | | if starts_auto is false, the specified date will be the date of the first scheduled installment. YYYY-mm-dd
+
+## Add a contract signature
+
+```shell
+curl "https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json" \
+  -X PUT \
+  -- data '{"term": 3}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341',
+  headers: {
+    Authorization: 'Bearer your_api_key'
+  },
+  method: 'PUT',
+  json: true,
+  body: {
+    contract_signature: 'John Doe'
+  }
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "term_units": "months",
+    "term": 3,
+    "starts_date": null,
+    "starts_auto": true,
+    "repay_by_date": "2019-03-21",
+    "payment_amount": 256.25,
+    "num_payments": 3,
+    "inserted_at": "2018-12-21T22:01:18.623163",
+    "id": "64823d54-9d47-4cd9-9db0-b293294ca341",
+    "frequency_units": "months",
+    "frequency": 1,
+    "down_payment_amount": 256.25,
+    "description": null,
+    "contract_signed_date": null,
+    "contract_signature": "John Doe",
+    "contract_body": "By submitting your order and authorizing the charges on your card...",
+    "balance": 768.75,
+    "auto_process": true,
+    "amount": 1025
+}
+```
+
+Adds a signature for a payment plan contract which has not yet been signed. Use this when implementing your own checkout UI after the customer has submit the form and before confirming the payment intent with Stripe.
+
+### HTTP request
+`PUT /payment_schedule/sign/:id`
+
+### Parameters
+
+Parameter | Type | Required | Description
+--------- | ----------- | ----------- | -----------
+contract_signature | string | yes | the customer's signed name
+ip_address | string | no | ip address of the customer, if not provided will default to ip address set on the payment plan
+user_agent | string | no | user agent of customer's browser, if not provided will default to user agent set on the payment plan

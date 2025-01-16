@@ -62,27 +62,51 @@ request(options, function (error, response, payment_method) {
     <!-- A Stripe Element will be inserted here. -->
   </div>
 
+  <div>
+    <label>Name on card</label>
+    <input type="text" id="card-name" />
+  </div>
+
   <button id="btnSubmit">Add Payment Method</button>
 </form>
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-// partial.ly public key
+// partial.ly public test mode key
 var publicKey = 'pk_test_eV3vdXbE4SrfLjJYn9XUSUwx',
   stripe = Stripe(publicKey),
   elements = stripe.elements();
 
 // Create an instance of the card Element.
-var card = elements.create('card');
+var cardElement = elements.create('card');
 
 // Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
+cardElement.mount('#card-element');
 
 // Handle form submission.
-var form = document.getElementById('payment-form');
+var form = document.getElementById('payment-form'),
+  nameElement = document.getElementById('card-name');
 form.addEventListener('submit', function() {
-  // tokenize payment data with Stripe
-  stripe.createToken(card).then(function(result) {
+  // use Stripe's payment methods api
+  stripe.createPaymentMethod({
+    type: 'card',
+    card: cardElement,
+    billing_details: {
+      name: nameElement.value
+    }
+  }).then(function(result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      alert(result.error.message);
+    } else {
+      // get the payment method id from result.paymentMethod.id
+      // to send to Partially in the stripe_payment_method_id field
+      //addHiddenField('stripe_payment_method_id', result.paymentMethod.id);
+    }
+  });
+  // or, use Stripe's deprecated sources api to create a token
+  /*
+  stripe.createToken(cardElement).then(function(result) {
     if (result.error) {
       // Inform the user if there was an error.
       alert(result.error.message);
@@ -90,31 +114,31 @@ form.addEventListener('submit', function() {
       // use result.token.id to send in the token_id field to Partial.ly
     }
   });
+  */
 });
 </script>
 ```
 
-Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with [Stripe.js](https://stripe.com/docs/stripe-js) before being sent to Partial.ly.
+Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with [Stripe.js](https://stripe.com/docs/stripe-js) using the [card element](https://docs.stripe.com/js/element/other_element?type=card) before being sent to Partial.ly.
 
-When creating your Stripe.js object, use the following public key to initialize the Stripe SDK
+When creating your Stripe.js object, use the the public key for your Stripe account to initialize the Stripe SDK.
 
-`pk_live_huSEiMMI7gSK7ORKzZB448xr`
-
-When testing with our [Partial.ly test server](https://demo.partial.ly), use the following public key
+When testing with our [Partial.ly test server](https://demo.partial.ly), if you do not yet have your own Stripe account you may use the following public key
 
 `pk_test_eV3vdXbE4SrfLjJYn9XUSUwx`
 
 ### HTTP Request
 
-`GET /payment_method`
+`POST /payment_method`
 
 ### Parameters
 
 Parameter | Type | Required | Description
 --------- | -----------  | -------- | ------
 customer_id | string | yes | id of customer to associate with
-type | string | yes | "card"
-token_id | string | no | the token id returned from Stripe.js. Required for "card" type
+type | string | yes | only "card" is supported
+stripe_payment_method_id | string | yes | the id of a payment method created from a Stripe card element
+token_id | string | no | the token id of a source returned from Stripe.js. Deprecated by Stripe in favor of their payment methods api
 
 ## List payment methods
 

@@ -185,7 +185,7 @@ If the payment is for the entire remaining balance of the plan, it will be proce
 If the payment is for less than the balance, a new payment schedule will need to be generated and signed by the customer.
 This step does not actually process
 the payment, but instead returns the adjusted payment schedule,
-installments, and contract for the customer to sign. Which is completed in the [Confirm a payment](#confirm-a-payment) step
+installments, and contract for the customer to sign, which is completed in the [Confirm a payment](#confirm-a-payment) step. You can also [pay a scheduled installment](#pay-scheduled-installment), which will keep the same payment schedule and instead just pay the next scheduled installment.
 
 In case the supplied payment method requires 3d secure authentication (required for [Strong Customer Authentication](https://stripe.com/payments/strong-customer-authentication)), the resulting payment will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
 

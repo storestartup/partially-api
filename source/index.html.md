@@ -21,6 +21,7 @@ includes:
   - refunds
   - disputes
   - webhooks
+  - examples
 
 search: true
 ---

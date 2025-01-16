@@ -135,9 +135,12 @@ request(options, function (error, response, body) {
 ```
 
 Creates a new payment plan in *checkout* status. The payment schedule can automatically be created from an offer by sending an *offer_id* parameter, otherwise a *payment_schedule* can be specified. Likewise, either a *customer_id* for an existing customer can be specified, or a customer object can be sent and a new customer will be created, or the existing one attached.
-To open the payment plan, use the [open](#open-a-payment-plan) method after it has been created.
 
 A payment schedule will also be created and associated with the payment plan. The scheduled installments will also be generated and returned, but they will not be stored in the database until the payment plan is opened.
+
+You can set the `create_stripe_payment_intent` parameter to true and Partially will create a Stripe payment intent, returned in the `"payment_intent"` key, which you can use to create a [Stripe payment element](https://docs.stripe.com/payments/payment-element) to capture customer payment method details in your UI. We have [an example app](https://gitlab.com/partially-public/api-checkout-example) demonstrating how to create your own checkout UI using the Partially API and a Stripe payment element.
+
+To open the payment plan with a saved payment method, use the [open](#open-a-payment-plan) method after it has been created.
 
 ### HTTP Request
 
@@ -166,6 +169,7 @@ shipto_country | string | no | 2 letter country abbreviation
 integration | string | no | third party integration to send payment plan to. shopify, woocommerce, bigcommerce, opencart, or prestashop
 status | string | no | checkout or pending. default is checkout
 send_plan_request | string | no | set to true to send a plan request email to customer to complete checkout. plan must be in pending status
+create_stripe_payment_intent | boolean | no | set to true to create a Stripe payment_intent you can use for a Stripe payment element to capture payment method details in your UI
 
 
 ### line_items
@@ -244,6 +248,8 @@ request(options, function (error, response, payment_plan) {
 
 Opens a payment plan by signing the customer contract, attaching a payment method (new or existing), and processing the down payment if there is one. Only payment plans in *checkout* or *pending* status can be opened.
 
+While you may supply a tokenized source from Stripe in the `payment_method.token_id` field, Stripe has deprecated the sources API so we recommend instead to create a payment intent when creating the payment plan, which you can use with a Stripe payment element to capture customer payment method details. See the [examples](#) section for an overview of the process.
+
 In case the supplied payment method requires 3d secure authentication (required for [Strong Customer Authentication](https://stripe.com/payments/strong-customer-authentication)), the resulting payment plan will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
 
 ### HTTP request
@@ -259,7 +265,7 @@ Parameter | Type | Required | Description
 payment_schedule.contract_signature | string | yes | customer's signature
 payment_method.id | string | no | existing payment method id
 payment_method.type | string | no | "card", required if payment_method.id not sent
-payment_method.token_id | string | no | see [Payment Methods](#payment-methods) for details on creating new payment methods
+payment_method.token_id | string | no | Stripe tokenized source, deprecated by Stripe in favor of their payment methods api. See [Payment Methods](#payment-methods) for details on creating new payment methods
 return_url | string | no | your URL to redirect user to after 3d secure authentication
 
 ## Cancel a payment plan
