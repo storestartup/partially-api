@@ -461,6 +461,9 @@
                   <li>
                     <a href="#checkout_abandoned-event" class="toc-h2 toc-link" data-title="checkout_abandoned event">checkout_abandoned event</a>
                   </li>
+                  <li>
+                    <a href="#installment_rescheduled-event" class="toc-h2 toc-link" data-title="installment_rescheduled event">installment_rescheduled event</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -5588,6 +5591,49 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Sent when a Partial.ly checkout is abandoned. The amount of time it takes to triggered this can be configured in your abandoned cart settings in the Partial.ly merchant portal. Note that if the customer hasn&#39;t made it through the customer step of the checkout process by the time the checkout is considered abandoned, this information will be empty in the webhook.</p>
+<h2 id='installment_rescheduled-event'>installment_rescheduled event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"installment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123abc"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scheduled"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-08-25T15:32:34.330237"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"345345"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"456456"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@gmail.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"234234"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">25.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weeks"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-09T15:32:34.325489Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"installment_rescheduled"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a customer reschedules an installment</p>
 <h1 id='examples'>Examples</h1><h2 id='create-your-own-checkout-ui'>Create your own checkout UI</h2>
 <p>You can create your own user interface for customers to create Partially payment plans using the Partially API and Stripe.js. Doing so involves a few steps, detailed below. We also have a <a href="https://gitlab.com/partially-public/api-checkout-example">sample app</a> implemented in nodejs demonstrating a working example of a custom interface for purchasing tickets with payment plans.</p>
 
