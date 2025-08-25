@@ -1125,3 +1125,51 @@ Sent when a dispute is closed, either won or lost.
 ```
 
 Sent when a Partial.ly checkout is abandoned. The amount of time it takes to triggered this can be configured in your abandoned cart settings in the Partial.ly merchant portal. Note that if the customer hasn't made it through the customer step of the checkout process by the time the checkout is considered abandoned, this information will be empty in the webhook.
+
+## installment_rescheduled event
+
+```json
+{
+  "data": {
+    "installment": {
+      "id": "123abc",
+      "status": "scheduled",
+      "amount": 25.0,
+      "inserted_at": "2025-08-25T15:32:34.330237",
+      "payment_plan": {
+        "id": "345345",
+        "status": "open",
+        "number": "1",
+        "currency": "USD",
+        "amount": 100.0,
+        "customer": {
+          "id": "456456",
+          "email": "jdoe@gmail.com",
+          "first_name": "John",
+          "last_name": "Doe"
+        },
+        "amount_paid": 0.0
+      },
+      "payment_schedule": {
+        "id": "234234",
+        "term": 2,
+        "currency": "USD",
+        "amount": 100.0,
+        "num_payments": 4,
+        "auto_process": true,
+        "payment_amount": 25.0,
+        "down_payment_amount": 0.0,
+        "frequency_units": "weeks",
+        "term_units": "months",
+        "frequency": 1
+      },
+      "scheduled": "2025-09-09T15:32:34.325489Z",
+      "retry_number": 0
+    }
+  },
+  "id": "123456789",
+  "event": "installment_rescheduled"
+}
+```
+
+Sent when a customer reschedules an installment
