@@ -444,6 +444,9 @@
                     <a href="#plan_defaulted-event" class="toc-h2 toc-link" data-title="plan_defaulted event">plan_defaulted event</a>
                   </li>
                   <li>
+                    <a href="#plan_canceled-event" class="toc-h2 toc-link" data-title="plan_canceled event">plan_canceled event</a>
+                  </li>
+                  <li>
                     <a href="#payment_succeeded-event" class="toc-h2 toc-link" data-title="payment_succeeded event">payment_succeeded event</a>
                   </li>
                   <li>
@@ -5074,6 +5077,266 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Sent when a payment plan status changes to defaulted, which will occurr when the configured number of consecutive scheduled installments have failed (default 3).</p>
+<h2 id='plan_canceled-event'>plan_canceled event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12cac1c5-c475-4157-a79b-3b39e44de13a"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"0"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39416882462768"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://storestartup.myshopify.com/cdn/shop/products/Gold-Shirt-630x531_small.jpg?v=1617741910"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gold tshirt"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7500"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6561922383920"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7500"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39416882462768"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"1"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20218727873"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Excellent Product"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"price"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6436291009"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20218727873"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"matrixify_imported"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopify"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"canceled"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">578</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.8</span><span class="err">e</span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:08:01Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fa42b43d-af00-411a-89e1-dc415849652b"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fa42b43d-af00-411a-89e1-dc415849652b"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-19T17:55:09Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jsmithd@gmail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+17074983351"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/New_York"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"345 bayshore blvd"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33606"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopify"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6708614692912"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"345 bayshore blvd"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_address2"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FL"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"33606"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"shipto_country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">780.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fe0f770d-37be-4f89-b92d-729516324ba8"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">7020.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.8</span><span class="err">e</span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:08:01Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47.203.18.121"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b3c802ba-b460-433e-9e4c-f06cbc266b33"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-10T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5b59023b-6e21-4b6d-b67b-65568ae16f29"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-24T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"84fbbee0-c507-43e8-b203-327c8b7471e1"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-11-07T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"982dcda0-6ad9-43e4-933c-a0144290d3fb"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-11-21T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"837050ea-faff-4a7c-8d57-6046c06a6d8f"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-12-05T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55e444d0-9790-4e33-ba66-af53ef2b0f5a"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-12-19T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b1d46ea9-df41-4f08-88a3-82468361e8c2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-01-02T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"52643e3b-5ce7-454b-8780-53b71553bade"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-01-16T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e5f35533-013c-4c89-85d2-15712643ae4e"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-01-30T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"da2fb375-833e-49a2-bc61-7ac0de04b3ba"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-02-13T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e451933c-da7a-4048-bba9-dd9ab1146a9c"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-02-27T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec52a369-7a84-4c59-873f-9f8b46cf00ae"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-13T15:10:27Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">585.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">780.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signed_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:10:27Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"refer"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weeks"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"months"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By submitting your order and authorizing the charges on your card, you are legally bound to the following terms:</span><span class="se">\r\n\r\n</span><span class="s2">I, John Smith, &lt;strong&gt;acknowledge&lt;/strong&gt; that I authorize Partial.ly to charge $780.00 USD on behalf of Store Startupz today, and  $585.00 USD on the following payment dates:</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday October 10, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday October 24, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday November 7, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday November 21, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday December 5, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday December 19, 2025</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday January 2, 2026</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday January 16, 2026</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday January 30, 2026</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday February 13, 2026</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday February 27, 2026</span><span class="se">\r\n\r\n\r\n</span><span class="s2">$585.00 USD on Friday March 13, 2026</span><span class="se">\r\n\r\n</span><span class="s2">I acknowledge that a total of $7,800.00 USD USD will be paid to Store Startupz by March 13, 2026.</span><span class="se">\r\n\r\n\r\n</span><span class="s2">I acknowledge that the credit card(s) or payment method(s) I am using to make this purchase will be active, valid and have sufficient funds available during the entire term of the payback period. If for any reason my payment is declined, I will provide an alternative, valid payment method.</span><span class="se">\r\n\r\n</span><span class="s2">&lt;em&gt;I understand&lt;/em&gt; that I may be assessed a late fee(s) if a payment is missed on any of the agreed-upon payment dates for any reason whatsoever.</span><span class="se">\r\n\r\n</span><span class="s2">I understand that I am legally bound to these terms and required by law to make all payments on the agreed-upon payment dates.</span><span class="se">\r\n\r\n</span><span class="s2">Store Startupz reserves the right to report delinquent payments to credit agencies and collections agencies.</span><span class="se">\r\n\r\n</span><span class="s2">"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_auto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"starts_date"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"frequency_days"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="mi">15</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days_enabled?"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_payment_date_buffer_days"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"term_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-09-27"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"repay_by_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-26"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47.203.18.121"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b8f1d657-c671-4585-ba93-9250fc90f0c3"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1f9aed5b-7ea0-4f13-b5b0-ca50dcf7a7ee"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6561922383920"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7500"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39416882462768"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.5</span><span class="err">e</span><span class="mi">3</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gold tshirt"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://storestartup.myshopify.com/cdn/shop/products/Gold-Shirt-630x531_small.jpg?v=1617741910"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.5</span><span class="err">e</span><span class="mi">3</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:08:01Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopify"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39416882462768"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lb"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"39416882462768"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6a86c603-1e5e-423e-92d7-384a56e9eec2"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"product_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6436291009"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20218727873"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Excellent Product"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:08:01Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shopify"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20218727873"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lb"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20218727873"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8f9473a2-32fd-452a-a6f7-1b6185a7c8b8"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"free shipping"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-26T15:09:32Z"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight_units"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lb"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"shipping"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"sku"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"variant_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.8</span><span class="err">e</span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_method_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ee067511-2028-40e0-855d-50420dda6fcb"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"is_reopened"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90c1a1d9-6168-4086-88b4-df6145af0b2d"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_canceled"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"shopify_cancel_order"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"shopify_restock_inventory"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Triggered when a payment plan is canceled. If the payment plan integration is shopify, the user canceling the payment plan is presented with checkboxes to cancel the Shopify order and to restock inventory on the canceled order. Doing so will set the <code>shopify_cancel_order</code> and <code>shopify_restock_inventory</code> fields. Note that it is up to your webhook handler to actually cancel the Shopify order.</p>
 <h2 id='payment_succeeded-event'>payment_succeeded event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"payment_succeeded"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="p">,</span><span class="w">
