@@ -579,6 +579,271 @@ The plan_paid event is triggered when a payment plan is fully paid.
 
 Sent when a payment plan status changes to defaulted, which will occurr when the configured number of consecutive scheduled installments have failed (default 3).
 
+## plan_canceled event
+
+```json
+{
+  "data": {
+    "payment_plan": {
+      "id": "12cac1c5-c475-4157-a79b-3b39e44de13a",
+      "meta": {
+        "items": {
+          "0": {
+            "id": "39416882462768",
+            "image": "https://storestartup.myshopify.com/cdn/shop/products/Gold-Shirt-630x531_small.jpg?v=1617741910",
+            "name": "Gold tshirt",
+            "price": "7500",
+            "product_id": "6561922383920",
+            "quantity": "1",
+            "sku": "",
+            "total": "7500",
+            "variant_id": "39416882462768"
+          },
+          "1": {
+            "id": "20218727873",
+            "name": "Excellent Product",
+            "price": "300",
+            "product_id": "6436291009",
+            "quantity": "1",
+            "sku": "",
+            "total": "300",
+            "variant_id": "20218727873"
+          }
+        },
+        "matrixify_imported": false,
+        "source": "shopify"
+      },
+      "status": "canceled",
+      "number": 578,
+      "currency": "USD",
+      "amount": 7.8e3,
+      "inserted_at": "2025-09-26T15:08:01Z",
+      "customer_id": "fa42b43d-af00-411a-89e1-dc415849652b",
+      "customer": {
+        "id": "fa42b43d-af00-411a-89e1-dc415849652b",
+        "inserted_at": "2021-04-19T17:55:09Z",
+        "email": "jsmithd@gmail.com",
+        "first_name": "John",
+        "last_name": "Smith",
+        "phone": "+17074983351",
+        "timezone": "America/New_York",
+        "shipto_name": "John Smith",
+        "shipto_address": "345 bayshore blvd",
+        "shipto_address2": null,
+        "shipto_city": "Tampa",
+        "shipto_state": "FL",
+        "shipto_postal_code": "33606",
+        "shipto_country": "US"
+      },
+      "integration": "shopify",
+      "integration_id": "6708614692912",
+      "shipto_name": "John Smith",
+      "shipto_address": "345 bayshore blvd",
+      "shipto_address2": null,
+      "shipto_city": "Tampa",
+      "shipto_state": "FL",
+      "shipto_postal_code": "33606",
+      "shipto_country": "US",
+      "amount_paid": 780.0,
+      "payment_schedule": {
+        "id": "fe0f770d-37be-4f89-b92d-729516324ba8",
+        "term": 6,
+        "description": null,
+        "balance": 7020.0,
+        "amount": 7.8e3,
+        "inserted_at": "2025-09-26T15:08:01Z",
+        "num_payments": 12,
+        "auto_process": true,
+        "ip_address": "47.203.18.121",
+        "installments": [
+          {
+            "id": "b3c802ba-b460-433e-9e4c-f06cbc266b33",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-10-10T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "5b59023b-6e21-4b6d-b67b-65568ae16f29",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-10-24T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "84fbbee0-c507-43e8-b203-327c8b7471e1",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-11-07T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "982dcda0-6ad9-43e4-933c-a0144290d3fb",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-11-21T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "837050ea-faff-4a7c-8d57-6046c06a6d8f",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-12-05T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "55e444d0-9790-4e33-ba66-af53ef2b0f5a",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2025-12-19T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "b1d46ea9-df41-4f08-88a3-82468361e8c2",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-01-02T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "52643e3b-5ce7-454b-8780-53b71553bade",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-01-16T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "e5f35533-013c-4c89-85d2-15712643ae4e",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-01-30T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "da2fb375-833e-49a2-bc61-7ac0de04b3ba",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-02-13T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "e451933c-da7a-4048-bba9-dd9ab1146a9c",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-02-27T15:10:27Z",
+            "retry_number": 0
+          },
+          {
+            "id": "ec52a369-7a84-4c59-873f-9f8b46cf00ae",
+            "amount": 585.0,
+            "inserted_at": "2025-09-26T15:10:27Z",
+            "scheduled": "2026-03-13T15:10:27Z",
+            "retry_number": 0
+          }
+        ],
+        "payment_amount": 585.0,
+        "down_payment_amount": 780.0,
+        "contract_signed_date": "2025-09-26T15:10:27Z",
+        "contract_signature": "refer",
+        "frequency_units": "weeks",
+        "term_units": "months",
+        "contract_body": "By submitting your order and authorizing the charges on your card, you are legally bound to the following terms:\r\n\r\nI, John Smith, <strong>acknowledge</strong> that I authorize Partial.ly to charge $780.00 USD on behalf of Store Startupz today, and  $585.00 USD on the following payment dates:\r\n\r\n\r\n$585.00 USD on Friday October 10, 2025\r\n\r\n\r\n$585.00 USD on Friday October 24, 2025\r\n\r\n\r\n$585.00 USD on Friday November 7, 2025\r\n\r\n\r\n$585.00 USD on Friday November 21, 2025\r\n\r\n\r\n$585.00 USD on Friday December 5, 2025\r\n\r\n\r\n$585.00 USD on Friday December 19, 2025\r\n\r\n\r\n$585.00 USD on Friday January 2, 2026\r\n\r\n\r\n$585.00 USD on Friday January 16, 2026\r\n\r\n\r\n$585.00 USD on Friday January 30, 2026\r\n\r\n\r\n$585.00 USD on Friday February 13, 2026\r\n\r\n\r\n$585.00 USD on Friday February 27, 2026\r\n\r\n\r\n$585.00 USD on Friday March 13, 2026\r\n\r\nI acknowledge that a total of $7,800.00 USD USD will be paid to Store Startupz by March 13, 2026.\r\n\r\n\r\nI acknowledge that the credit card(s) or payment method(s) I am using to make this purchase will be active, valid and have sufficient funds available during the entire term of the payback period. If for any reason my payment is declined, I will provide an alternative, valid payment method.\r\n\r\n<em>I understand</em> that I may be assessed a late fee(s) if a payment is missed on any of the agreed-upon payment dates for any reason whatsoever.\r\n\r\nI understand that I am legally bound to these terms and required by law to make all payments on the agreed-upon payment dates.\r\n\r\nStore Startupz reserves the right to report delinquent payments to credit agencies and collections agencies.\r\n\r\n",
+        "starts_auto": true,
+        "starts_date": null,
+        "frequency": 2,
+        "frequency_days": [
+          1,
+          15
+        ],
+        "first_payment_date_buffer_days_enabled?": false,
+        "first_payment_date_buffer_days": 7,
+        "term_date": "2017-09-27",
+        "repay_by_date": "2026-03-26"
+      },
+      "ip_address": "47.203.18.121",
+      "offer_id": "b8f1d657-c671-4585-ba93-9250fc90f0c3",
+      "line_items": [
+        {
+          "id": "1f9aed5b-7ea0-4f13-b5b0-ca50dcf7a7ee",
+          "meta": {
+            "product_id": "6561922383920",
+            "sku": "",
+            "total": "7500",
+            "variant_id": "39416882462768"
+          },
+          "total": 7.5e3,
+          "dynamic": false,
+          "description": "Gold tshirt",
+          "image": "https://storestartup.myshopify.com/cdn/shop/products/Gold-Shirt-630x531_small.jpg?v=1617741910",
+          "amount": 7.5e3,
+          "inserted_at": "2025-09-26T15:08:01Z",
+          "integration": "shopify",
+          "integration_id": "39416882462768",
+          "weight_units": "lb",
+          "quantity": 1,
+          "dynamic_type": "generic",
+          "weight": 0.0,
+          "sku": "",
+          "variant_id": "39416882462768"
+        },
+        {
+          "id": "6a86c603-1e5e-423e-92d7-384a56e9eec2",
+          "meta": {
+            "product_id": "6436291009",
+            "sku": "",
+            "total": "300",
+            "variant_id": "20218727873"
+          },
+          "total": 300.0,
+          "dynamic": false,
+          "description": "Excellent Product",
+          "image": null,
+          "amount": 300.0,
+          "inserted_at": "2025-09-26T15:08:01Z",
+          "integration": "shopify",
+          "integration_id": "20218727873",
+          "weight_units": "lb",
+          "quantity": 1,
+          "dynamic_type": "generic",
+          "weight": 0.0,
+          "sku": "",
+          "variant_id": "20218727873"
+        },
+        {
+          "id": "8f9473a2-32fd-452a-a6f7-1b6185a7c8b8",
+          "meta": null,
+          "total": 0.0,
+          "dynamic": true,
+          "description": "free shipping",
+          "image": null,
+          "amount": 0.0,
+          "inserted_at": "2025-09-26T15:09:32Z",
+          "integration": null,
+          "integration_id": null,
+          "weight_units": "lb",
+          "quantity": 1,
+          "dynamic_type": "shipping",
+          "weight": 0.0,
+          "sku": null,
+          "variant_id": null
+        }
+      ],
+      "subtotal": 7.8e3,
+      "payment_method_id": "ee067511-2028-40e0-855d-50420dda6fcb",
+      "merchant_notes": null,
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+      "is_reopened": false
+    }
+  },
+  "id": "90c1a1d9-6168-4086-88b4-df6145af0b2d",
+  "event": "plan_canceled",
+  "shopify_cancel_order": true,
+  "shopify_restock_inventory": false
+}
+```
+
+Triggered when a payment plan is canceled. If the payment plan integration is shopify, the user canceling the payment plan is presented with checkboxes to cancel the Shopify order and to restock inventory on the canceled order. Doing so will set the `shopify_cancel_order` and `shopify_restock_inventory` fields. Note that it is up to your webhook handler to actually cancel the Shopify order.
+
 ## payment_succeeded event
 
 ```json
