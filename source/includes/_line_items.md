@@ -5,9 +5,10 @@
 ```shell
 curl "https://partial.ly/api/line_item" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  -- data '{"payment_plan_id": "4a2da2b5-ccbc-4631-93ad-ea30da49a412", "amount": 5.99, "description": "adjustment"}'
+  --data '{"payment_plan_id": "4a2da2b5-ccbc-4631-93ad-ea30da49a412", "amount": 5.99, "description": "adjustment"}'
 ```
 
 ```javascript
@@ -18,7 +19,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/line_item',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: "application/json",
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -78,6 +81,7 @@ integration_id | string | no | line item id for third party service
 ```shell
 curl "https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -X DELETE
 ```
 
@@ -89,7 +93,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/line_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   },
   method: 'DELETE'
 };

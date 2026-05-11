@@ -7,7 +7,8 @@ Offer items can be for fixed amounts or a percent of the payment plan subtotal.
 
 ```shell
 curl "https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -18,7 +19,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer_item?offer_id=60aed439-473f-48e0-80ef-3a8627dd243a',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -63,6 +65,7 @@ offer_id | string | yes | offer id to get offer items for
 ```shell
 curl "https://partial.ly/api/offer_item" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
   --data '{"name": "processing fee", "amount": 2.5, "amount_type": "percent", "offer_id": "60aed439-473f-48e0-80ef-3a8627dd243a"}'
@@ -76,7 +79,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer_item',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -127,6 +132,7 @@ amount | decimal | yes | | The amount to add to the plan. For percent will be th
 ```shell
 curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
   --data '{"amount": 3.75}'
@@ -140,7 +146,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -181,6 +189,7 @@ Same parameters as create offer item
 ```shell
 curl "https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -X DELETE
 ```
 
@@ -192,7 +201,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer_item/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   },
   method: 'DELETE'
 };

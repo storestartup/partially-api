@@ -10,9 +10,10 @@ will be pending for up to 5 business days while we wait for them to be confirmed
 ```shell
 curl "https://partial.ly/api/payment/create" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  -- data '{"payment_plan_id": "1597c18b-ffd4-4641-b2ca-78cccd3547f5", "amount": 241.87}'
+  --data '{"payment_plan_id": "1597c18b-ffd4-4641-b2ca-78cccd3547f5", "amount": 241.87}'
 ```
 
 ```javascript
@@ -23,7 +24,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment/create',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -64,9 +67,10 @@ request(options, function (error, response, payment) {
 ```shell
 curl "https://partial.ly/api/payment/create" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99}'
+  --data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99}'
 ```
 
 ```javascript
@@ -77,7 +81,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment/create',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -205,9 +211,10 @@ return_url | string | no | your URL to redirect user to after 3d secure authenti
 ```shell
 curl "https://partial.ly/api/payment/confirm" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  -- data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99, "contract_signature": "Customer signature"}'
+  --data '{"payment_plan_id": "027bb022-40b4-4763-945c-baddc612cbbb", "amount": 5.99, "contract_signature": "Customer signature"}'
 ```
 
 ```javascript
@@ -218,7 +225,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment/confirm',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -276,7 +285,8 @@ return_url | string | no | your URL to redirect user to after 3d secure authenti
 
 ```shell
 curl "https://partial.ly/api/payment" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -287,7 +297,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -364,7 +375,8 @@ customer | string | payments with the given customer id
 
 ```shell
 curl "https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -375,7 +387,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment/b1873714-bb39-4b07-ac54-10501a60c98a',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 

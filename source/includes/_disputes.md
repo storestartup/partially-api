@@ -4,7 +4,8 @@
 
 ```shell
 curl "https://partial.ly/api/dispute" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -15,7 +16,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/dispute',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 

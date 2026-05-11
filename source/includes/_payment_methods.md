@@ -7,6 +7,7 @@ A saved payment method attached to a customer. May be any type of credit or debi
 ```shell
 curl "https://partial.ly/api/payment_method" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
   --data '{"type": "card", "token_id": "tok_ch", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57"}'
@@ -20,7 +21,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_method',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -74,7 +77,7 @@ request(options, function (error, response, payment_method) {
 <script>
 // partial.ly public test mode key
 var publicKey = 'pk_test_eV3vdXbE4SrfLjJYn9XUSUwx',
-  stripe = Stripe(publicKey),
+  stripe = Stripe(publicKey, {stripeAccount: 'acct_yourstripeaccountid'}),
   elements = stripe.elements();
 
 // Create an instance of the card Element.
@@ -121,11 +124,15 @@ form.addEventListener('submit', function() {
 
 Payment method details must not be sent directly to Partial.ly. They need to be captured and tokenized with [Stripe.js](https://stripe.com/docs/stripe-js) using the [card element](https://docs.stripe.com/js/element/other_element?type=card) before being sent to Partial.ly.
 
-When creating your Stripe.js object, use the the public key for your Stripe account to initialize the Stripe SDK.
+When creating your Stripe.js object, use the the public key for Partially's Stripe account to initialize the Stripe SDK, and in the options populate the `stripeAccount` property of the options object with your Stripe account id.
 
 When testing with our [Partial.ly test server](https://demo.partial.ly), if you do not yet have your own Stripe account you may use the following public key
 
 `pk_test_eV3vdXbE4SrfLjJYn9XUSUwx`
+
+Partially production Stripe public key:
+
+`pk_live_huSEiMMI7gSK7ORKzZB448xr`
 
 ### HTTP Request
 
@@ -144,7 +151,8 @@ token_id | string | no | the token id of a source returned from Stripe.js. Depre
 
 ```shell
 curl "https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -155,7 +163,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_method?customer_id=452cc42f-d999-4c0f-998b-325c4e0e8f57',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -217,6 +226,7 @@ customer_id | string | yes | id of customer to get payment methods for
 ```shell
 curl "https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -X DELETE
 ```
 
@@ -228,7 +238,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_method/36afc659-f03d-485b-a850-65871fa759a7',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   },
   method: 'DELETE'
 };

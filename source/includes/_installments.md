@@ -7,6 +7,8 @@ Installments represent a payment to be processed in the future, as scheduled by 
 ```shell
 curl "https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
   -X PUT
 ```
 
@@ -18,7 +20,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/installment/pay/6a85b229-69e6-4850-8309-edf7bfc3cec1',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT'
 };
@@ -64,7 +68,8 @@ return_url | string | no | your URL to redirect user to after 3d secure authenti
 
 ```shell
 curl "https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -75,7 +80,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/installment?payment_schedule_id=1f5d9716-a041-47ef-8c57-86af22efa31c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 

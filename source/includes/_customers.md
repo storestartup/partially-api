@@ -4,7 +4,8 @@
 
 ```shell
 curl "https://partial.ly/api/customer" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -15,7 +16,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -88,7 +90,8 @@ q | Search query. Will search for email if query contains an @, otherwise will s
 
 ```shell
 curl "https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -97,7 +100,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/9a426155-a927-4984-8738-0bd1ffc15248',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -141,6 +145,7 @@ This endpoint retrieves a specific customer.
 curl "https://partial.ly/api/customer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{"email": "testing@aol.com", "first_name": "John", "last_name": "Doe"}'
 ```
@@ -151,7 +156,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -219,6 +226,7 @@ password | string | no | | if a new user is being created, use the supplied pass
 curl "https://partial.ly/api/customer/53479e98-27a9-49e2-856c-bf47d0796ffc" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{"phone": "+12125551212"}'
 ```
@@ -229,7 +237,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/53479e98-27a9-49e2-856c-bf47d0796ffc',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -277,7 +287,10 @@ Same parameters as create customer
 ```shell
 curl "https://partial.ly/api/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc" \
   -X PUT \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  --data '{}'
 ```
 
 ```javascript
@@ -286,7 +299,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/gdpr_remove/53479e98-27a9-49e2-856c-bf47d0796ffc',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true
@@ -319,6 +334,7 @@ but all personally identifiable customer information will be anonymized. If the 
 curl "https://partial.ly/api/customer/login_password" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{"email": "aaa@y.co", "password": "test"}'
 ```
@@ -329,7 +345,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/login_password',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -381,6 +399,7 @@ password | string | yes
 curl "https://partial.ly/api/customer/login_email" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{"email": "aaa@y.co"}'
 ```
@@ -391,7 +410,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/login_email',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -428,6 +449,7 @@ email |  string | yes
 curl "https://partial.ly/api/customer/login_token" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   --data '{"token": "N5E9gL", "email": "aaa@y.co"}'
 ```
@@ -438,7 +460,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/customer/login_token',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,

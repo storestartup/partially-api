@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/payment_plan" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
   --data '{"amount": "1000", "customer_id": "452cc42f-d999-4c0f-998b-325c4e0e8f57", "offer_id": "60aed439-473f-48e0-80ef-3a8627dd243a"}'
@@ -18,7 +19,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -188,6 +191,7 @@ meta | object | no | additional meta data for line item. For Shopify integration
 ```shell
 curl "https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
   --data '{"payment_schedule": {"contract_signature": "Customer Signature"}, "payment_method": {"type": "card", "token_id": "tok_ch"}}'
@@ -201,7 +205,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan/open/ef2b5088-10cc-4246-914d-1f2de7a4075c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -252,6 +258,8 @@ While you may supply a tokenized source from Stripe in the `payment_method.token
 
 In case the supplied payment method requires 3d secure authentication (required for [Strong Customer Authentication](https://stripe.com/payments/strong-customer-authentication)), the resulting payment plan will have status "requires_action" and will contain the "redirect_url" key. In this scenario, you should redirect the user to the "redirect_url" to authorize the payment, after which point they will be redirected back to the "return_url" you provide.
 
+If the payment plan is currently in `defaulted` status, you must first call the [generate reopen schedule](#generate-reopen-payment-schedule) endpoint to generate a new payment schedule, which you can use to display the updated contract to the customer, before calling the open payment plan endpoint with their signature and payment method.
+
 ### HTTP request
 
 `PUT /payment_plan/open/:id`
@@ -268,12 +276,152 @@ payment_method.type | string | no | "card", required if payment_method.id not se
 payment_method.token_id | string | no | Stripe tokenized source, deprecated by Stripe in favor of their payment methods api. See [Payment Methods](#payment-methods) for details on creating new payment methods
 return_url | string | no | your URL to redirect user to after 3d secure authentication
 
+## Generate reopen payment schedule
+
+```shell
+curl "https://partial.ly/api/payment_plan/reopen_schedule/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  --data '{}'
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/payment_plan/reopen_schedule/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  headers: {
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  method: 'POST',
+  json: true,
+  body: {}
+};
+
+request(options, function (error, response, payment_plan) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "payment_schedule": {
+        "term_units": "months",
+        "term": 3,
+        "starts_date": null,
+        "starts_auto": true,
+        "repay_by_date": "2019-02-28",
+        "payment_amount": 256.25,
+        "num_payments": 3,
+        "inserted_at": "2018-11-28T17:20:46.753612",
+        "id": "8e2db276-7b45-4f1b-b479-0c25544d90c2",
+        "frequency_units": "months",
+        "frequency": 1,
+        "down_payment_amount": 256.25,
+        "description": null,
+        "contract_signed_date": null,
+        "contract_signature": null,
+        "contract_body": "By submitting your order and authorizing the charges on your card, you are legally bound to...",
+        "balance": 768.75,
+        "auto_process": true,
+        "amount": 1025
+    },
+    "payment_plan": {
+        "user_agent": null,
+        "subtotal": 1000,
+        "status": "defaulted",
+        "number": null,
+        "meta": null,
+        "merchant_notes": null,
+        "ip_address": null,
+        "integration_id": null,
+        "integration": null,
+        "inserted_at": "2018-11-28T17:20:46.711165",
+        "id": "2ab17c1a-860d-4575-be11-dcd5bbab467d",
+        "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+        "customer": {
+            "timezone": "America/New_York",
+            "shipto_state": null,
+            "shipto_postal_code": null,
+            "shipto_name": null,
+            "shipto_country": "US",
+            "shipto_city": null,
+            "shipto_address2": null,
+            "shipto_address": null,
+            "phone": null,
+            "last_name": "Person",
+            "inserted_at": "2018-11-28T16:57:42.923471",
+            "id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+            "first_name": "Testing",
+            "email": "aaa@y.co"
+        },
+        "currency": "USD",
+        "amount_paid": 0,
+        "amount": 1025
+    },
+    "line_items": [
+        {
+            "quantity": 1,
+            "meta": null,
+            "inserted_at": "2018-11-28T17:20:46.766599",
+            "id": "f345d9da-b67f-4056-8224-f7d9599f9439",
+            "dynamic_type": "generic",
+            "dynamic": true,
+            "description": "processing fee",
+            "amount": 25
+        }
+    ],
+    "installments": [
+        {
+            "scheduled": "2018-12-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-01-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        },
+        {
+            "scheduled": "2019-02-28T17:20:46.752714Z",
+            "retry_number": 0,
+            "inserted_at": null,
+            "id": null,
+            "amount": 256.25
+        }
+    ]
+}
+```
+
+Generates a new payment schedule for a `defaulted` status payment plan. This must be done before reopening a defauted payment plan. You can show the contract body from the newly created payment schedule to the customer to collect their signature before opening the payment plan.
+
+### HTTP request
+
+`POST /payment_plan/reopen_schedule/:id`
+
+*replace :id with the id of the payment plan to open*
+
 ## Cancel a payment plan
 
 ```shell
 curl "https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
   -H "Authorization: Bearer your_api_key" \
-  -X PUT
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -X PUT \
+  --data '{}'
 ```
 
 ```javascript
@@ -284,7 +432,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan/cancel/ef2b5088-10cc-4246-914d-1f2de7a4075c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT'
 };
@@ -319,6 +469,7 @@ cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify or
 ```shell
 curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
   -- data '{"merchant_notes": "Customer is very happy"}'
@@ -332,7 +483,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept": 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -412,8 +565,9 @@ integration_id | string | third party service id, for example shopify order id
 ## Retrieve a payment plan
 
 ```shell
-curl "https://partial.ly/api/payment_plan/cancel/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
-  -H "Authorization: Bearer your_api_key"
+curl "https://partial.ly/api/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -424,7 +578,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan/8f999efe-5798-4b51-a6c5-d21b0d04124b',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   },
   method: 'GET'
 };
@@ -637,7 +792,8 @@ Retrieves an existing payment plan
 
 ```shell
 curl "https://partial.ly/api/payment_plan?date=2018-11-28" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -648,7 +804,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan?date=2018-11-28',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -802,9 +959,10 @@ customer | string | plans with the given customer id
 ```shell
 curl "https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  --data ''
+  --data '{}'
 ```
 
 ```javascript
@@ -815,7 +973,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_plan/send_plan_request/8f999efe-5798-4b51-a6c5-d21b0d04124b',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,

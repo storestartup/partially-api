@@ -7,9 +7,10 @@ A payment schedule represents the terms and schedule for a payment plan. A payme
 ```shell
 curl "https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
-  -- data '{"term": 3}'
+  --data '{"term": 3}'
 ```
 
 ```javascript
@@ -20,7 +21,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_schedule/64823d54-9d47-4cd9-9db0-b293294ca341',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -111,9 +114,10 @@ Gets the binary pdf of the signed contract
 ```shell
 curl "https://partial.ly/api/payment_schedule" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
-  -- data '{"payment_plan_id": "71f98dc3-6d89-4e56-b14b-c0e27dac0158", "amount": 188.88, "term": 1, "term_units": "months", "frequency": 1, "frequency_units": "weeks"}'
+  --data '{"payment_plan_id": "71f98dc3-6d89-4e56-b14b-c0e27dac0158", "amount": 188.88, "term": 1, "term_units": "months", "frequency": 1, "frequency_units": "weeks"}'
 ```
 
 ```javascript
@@ -124,7 +128,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_schedule',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -243,9 +249,10 @@ starts_date | string | no | | if starts_auto is false, the specified date will b
 ```shell
 curl "https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
-  -- data '{"term": 3}'
+  --data '{"term": 3}'
 ```
 
 ```javascript
@@ -256,7 +263,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/payment_schedule/sign/64823d54-9d47-4cd9-9db0-b293294ca341',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,

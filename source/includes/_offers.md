@@ -6,7 +6,8 @@ An offer is a set of terms for a potential payment plan. Think of an offer as a 
 
 ```shell
 curl "https://partial.ly/api/offer" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -17,7 +18,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -75,7 +77,8 @@ This endpoint retrieves all offers.
 
 ```shell
 curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -84,7 +87,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -142,6 +146,7 @@ curl "https://partial.ly/api/offer" \
   -X POST \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
   --data '{"name": "Sample offer"}'
 ```
 
@@ -151,7 +156,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    'Content-Type:': 'application/json',
+    Accept: 'application/json'
   },
   method: 'POST',
   json: true,
@@ -242,6 +249,7 @@ curl "https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a" \
   -X PUT \
   -H "Authorization: Bearer your_api_key" \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
   --data '{"down_payment": 5}'
 ```
 
@@ -251,7 +259,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/offer/60aed439-473f-48e0-80ef-3a8627dd243a',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,

@@ -5,6 +5,7 @@
 ```shell
 curl "https://partial.ly/api/refund" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
   --data '{"payment_id": "2d1d0234-87c4-4184-a49f-02f4c0c30abe", "amount": 5.99, "notes": "discount"}'
@@ -18,7 +19,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/refund',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -68,7 +71,8 @@ notes | string | no |
 
 ```shell
 curl "https://partial.ly/api/refund" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -79,7 +83,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/refund',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 

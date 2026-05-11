@@ -67,6 +67,7 @@ Webhook listeners can be managed using the API, or through the [webhook user int
 ```shell
 curl "https://partial.ly/api/webhook" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X POST \
   --data '{"url": "http://localhost:8888/hook"}'
@@ -80,7 +81,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/webhook',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'POST',
   json: true,
@@ -124,7 +127,8 @@ event | string | no | the event to subscribe to, or * for all events (default)
 
 ```shell
 curl "https://partial.ly/api/webhook" \
-  -H "Authorization: Bearer your_api_key"
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json"
 ```
 
 ```javascript
@@ -135,7 +139,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/webhook',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   }
 };
 
@@ -169,6 +174,7 @@ Gets all webhook listeners
 ```shell
 curl "https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -X PUT \
   --data '{"url": "http://localhost:8888/hook"}'
@@ -182,7 +188,9 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/webhook/d5e43bed-041c-4ff4-b422-a401b10aad79',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   },
   method: 'PUT',
   json: true,
@@ -231,6 +239,7 @@ active | boolean | no | whether or not the webhook is active
 ```shell
 curl "https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c" \
   -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
   -X DELETE
 ```
 
@@ -242,7 +251,8 @@ var request = require('request');
 var options = {
   url: 'https://partial.ly/api/webhook/a9bec449-da6e-4dea-ad4a-a716aa90d40c',
   headers: {
-    Authorization: 'Bearer your_api_key'
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
   },
   method: 'DELETE'
 };
