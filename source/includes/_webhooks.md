@@ -111,7 +111,7 @@ request(options, function (error, response, webhook) {
 }
 ```
 
-Creates a new webhook listener. Events that can be subscribed to are [plan_opened](#plan_opened), plan_paid, plan_defaulted, plan_canceled, payment_succeeded, payment_failed, refund_created, dispute_created, dispute_closed, and checkout_abandoned.
+Creates a new webhook listener. Events that can be subscribed to are [plan_opened](#plan_opened-event), [plan_paid](#plan_paid-event), [plan_defaulted](#plan_defaulted-event), [plan_canceled](#plan_canceled-event), [payment_succeeded](#payment_succeeded-event), [payment_failed](#payment_failed-event), [refund_created](#refund_created-event), [dispute_created](#dispute_created-event), [dispute_closed](#dispute_closed-event), [installment_rescheduled](#installment_rescheduled-event), [checkout_abandoned](#checkout_abandoned-event), and [checkout_plan_deleted](#checkout_plan_deleted-event).
 
 ### HTTP request
 
@@ -1448,3 +1448,40 @@ Sent when a Partial.ly checkout is abandoned. The amount of time it takes to tri
 ```
 
 Sent when a customer reschedules an installment
+
+## checkout_plan-deleted event
+
+```json
+{
+  "data": {
+    "payment_plan": {
+      "id": "123456789abc",
+      "meta": {
+        "description": "dummy payment plan"
+      },
+      "status": "checkout",
+      "number": null,
+      "currency": "USD",
+      "customer_id": "xyz123",
+      "amount": 500.0,
+      "inserted_at": "2026-09-03T15:06:00.704902Z",
+      "customer": {
+        "id": "xyz123",
+        "email": "sample@test.com",
+        "first_name": "Sample",
+        "last_name": "Customer",
+        "phone": "888-555-1212"
+      },
+      "integration": null,
+      "integration_id": null,
+      "amount_paid": 0.0,
+      "ip_address": "192.168.1.1",
+      "offer_id": "offer123"
+    }
+  },
+  "id": "123456789",
+  "event": "checkout_plan_deleted"
+}
+```
+
+Sent when a checkout status plan has been deleted from the system, which happens after 14 days.
