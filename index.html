@@ -470,6 +470,9 @@
                   <li>
                     <a href="#installment_rescheduled-event" class="toc-h2 toc-link" data-title="installment_rescheduled event">installment_rescheduled event</a>
                   </li>
+                  <li>
+                    <a href="#checkout_plan-deleted-event" class="toc-h2 toc-link" data-title="checkout_plan-deleted event">checkout_plan-deleted event</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -4867,7 +4870,7 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Creates a new webhook listener. Events that can be subscribed to are <a href="#plan_opened">plan_opened</a>, plan_paid, plan_defaulted, plan_canceled, payment_succeeded, payment_failed, refund_created, dispute_created, dispute_closed, and checkout_abandoned.</p>
+<p>Creates a new webhook listener. Events that can be subscribed to are <a href="#plan_opened-event">plan_opened</a>, <a href="#plan_paid-event">plan_paid</a>, <a href="#plan_defaulted-event">plan_defaulted</a>, <a href="#plan_canceled-event">plan_canceled</a>, <a href="#payment_succeeded-event">payment_succeeded</a>, <a href="#payment_failed-event">payment_failed</a>, <a href="#refund_created-event">refund_created</a>, <a href="#dispute_created-event">dispute_created</a>, <a href="#dispute_closed-event">dispute_closed</a>, <a href="#installment_rescheduled-event">installment_rescheduled</a>, <a href="#checkout_abandoned-event">checkout_abandoned</a>, and <a href="#checkout_plan_deleted-event">checkout_plan_deleted</a>.</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>POST /webhook</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -6154,6 +6157,38 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Sent when a customer reschedules an installment</p>
+<h2 id='checkout_plan-deleted-event'>checkout_plan-deleted event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789abc"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dummy payment plan"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"checkout"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xyz123"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">500.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-09-03T15:06:00.704902Z"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xyz123"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sample@test.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sample"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Customer"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"888-555-1212"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.168.1.1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"offer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"offer123"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"checkout_plan_deleted"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a checkout status plan has been deleted from the system, which happens after 14 days.</p>
 <h1 id='examples'>Examples</h1><h2 id='create-your-own-checkout-ui'>Create your own checkout UI</h2>
 <p>You can create your own user interface for customers to create Partially payment plans using the Partially API and Stripe.js. Doing so involves a few steps, detailed below. We also have a <a href="https://gitlab.com/partially-public/api-checkout-example">sample app</a> implemented in nodejs demonstrating a working example of a custom interface for purchasing tickets with payment plans.</p>
 
