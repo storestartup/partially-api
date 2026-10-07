@@ -464,6 +464,52 @@ Parameter | Type | Required | Description
 cancel_shopify | boolean | no | if this payment plan is for a Shopify order, also cancel the Shopify order
 cancel_shopify_restock | boolean | no | if this payment plan is for a Shopify order, also restock the items from the order
 
+## Delete a payment plan
+
+```shell
+curl "https://partial.ly/api/payment_plan/ef2b5088-10cc-4246-914d-1f2de7a4075c" \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Accept: application/json" \
+  -X DELETE
+```
+
+```javascript
+// examples use the request library
+// https://github.com/request/request
+var request = require('request');
+
+var options = {
+  url: 'https://partial.ly/api/payment_plan/ef2b5088-10cc-4246-914d-1f2de7a4075c',
+  headers: {
+    Authorization: 'Bearer your_api_key',
+    Accept: 'application/json'
+  },
+  method: 'DELETE'
+};
+
+request(options, function (error, response, body) {
+  // asynchronous callback function
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "message": "PaymentPlan deleted"
+}
+```
+
+Deletes a payment plan. Only payment plans in *checkout* status can be deleted. The plan must have no associated payments, or every associated payment must be in `requires_payment_method` status. Plans with a paid or in-progress payment cannot be deleted.
+
+Checkout-status payment plans are automatically deleted after two weeks.
+
+### HTTP Request
+
+`DELETE /payment_plan/:id`
+
+*replace :id with the id of the payment plan to delete*
+
 ## Update a payment plan
 
 ```shell
