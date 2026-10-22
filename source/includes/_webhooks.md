@@ -111,7 +111,7 @@ request(options, function (error, response, webhook) {
 }
 ```
 
-Creates a new webhook listener. Events that can be subscribed to are [plan_opened](#plan_opened-event), [plan_paid](#plan_paid-event), [plan_defaulted](#plan_defaulted-event), [plan_canceled](#plan_canceled-event), [payment_succeeded](#payment_succeeded-event), [payment_failed](#payment_failed-event), [refund_created](#refund_created-event), [dispute_created](#dispute_created-event), [dispute_closed](#dispute_closed-event), [installment_rescheduled](#installment_rescheduled-event), [checkout_abandoned](#checkout_abandoned-event), and [checkout_plan_deleted](#checkout_plan_deleted-event).
+Creates a new webhook listener. Events that can be subscribed to are [plan_opened](#plan_opened-event), [plan_paid](#plan_paid-event), [plan_defaulted](#plan_defaulted-event), [plan_canceled](#plan_canceled-event), [payment_succeeded](#payment_succeeded-event), [payment_failed](#payment_failed-event), [refund_created](#refund_created-event), [dispute_created](#dispute_created-event), [dispute_closed](#dispute_closed-event), [installment_rescheduled](#installment_rescheduled-event), [plan_amended](#plan_amended-event), [checkout_abandoned](#checkout_abandoned-event), and [checkout_plan_deleted](#checkout_plan_deleted-event).
 
 ### HTTP request
 
@@ -1448,6 +1448,99 @@ Sent when a Partial.ly checkout is abandoned. The amount of time it takes to tri
 ```
 
 Sent when a customer reschedules an installment
+
+## plan_amended event
+
+```json
+{
+  "data": {
+    "payment_plan": {
+      "id": "2ab17c1a-860d-4575-be11-dcd5bbab467d",
+      "status": "open",
+      "number": 1042,
+      "currency": "USD",
+      "amount": 1300.0,
+      "subtotal": 1300.0,
+      "amount_paid": 200.0,
+      "customer_id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+      "meta": null,
+      "integration": null,
+      "integration_id": null,
+      "inserted_at": "2026-09-15T17:20:46.711165",
+      "customer": {
+        "id": "e3cbf1dc-0c11-483f-b604-d44fd93aac90",
+        "email": "jdoe@gmail.com",
+        "first_name": "John",
+        "last_name": "Doe"
+      },
+      "payment_schedule": {
+        "id": "5c1d7e2f-3a4b-4c5d-8e9f-0a1b2c3d4e5f",
+        "amount": 1300.0,
+        "balance": 1100.0,
+        "currency": "USD",
+        "num_payments": 4,
+        "payment_amount": 275.0,
+        "down_payment_amount": 0.0,
+        "auto_process": true,
+        "contract_signature": "John Doe",
+        "installments": [
+          {
+            "id": "9d8c7b6a-5f4e-4d3c-2b1a-0f9e8d7c6b5a",
+            "status": "scheduled",
+            "amount": 275.0,
+            "scheduled": "2026-11-15T00:00:00Z",
+            "retry_number": 0
+          }
+        ]
+      },
+      "line_items": [
+        {
+          "id": "2faa91f1-7b01-4111-9af9-967e70c272e8",
+          "description": "Wedding photography",
+          "amount": 1000.0,
+          "quantity": 1
+        },
+        {
+          "id": "7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b",
+          "description": "Photo package",
+          "amount": 300.0,
+          "quantity": 1
+        }
+      ]
+    },
+    "plan_amendment": {
+      "id": "b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c",
+      "payment_plan_id": "2ab17c1a-860d-4575-be11-dcd5bbab467d",
+      "status": "confirmed",
+      "previous_amount": 1000.0,
+      "amount": 1300.0,
+      "previous_balance": 800.0,
+      "balance": 1100.0,
+      "currency": "USD",
+      "changes": [
+        {
+          "action": "add",
+          "id": "7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b",
+          "before": null,
+          "after": {
+            "id": "7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b",
+            "description": "Photo package",
+            "amount": 300.0,
+            "quantity": 1
+          }
+        }
+      ],
+      "payment_schedule_id": "5c1d7e2f-3a4b-4c5d-8e9f-0a1b2c3d4e5f",
+      "meta": null,
+      "confirmed_at": "2026-10-23T14:02:11Z"
+    }
+  },
+  "id": "123456789",
+  "event": "plan_amended"
+}
+```
+
+Sent when a [plan amendment](#plan-amendments) is confirmed and the payment plan's line items, totals and payment schedule have been updated. `payment_plan` contains the amended plan with its new payment schedule and line items, and `plan_amendment` contains the confirmed amendment, including the line item `changes` that were made.
 
 ## checkout_plan-deleted event
 

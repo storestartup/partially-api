@@ -15,6 +15,7 @@ includes:
   - payment_methods
   - payment_plans
   - line_items
+  - plan_amendments
   - payments
   - payment_schedules
   - installments
