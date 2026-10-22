@@ -356,6 +356,29 @@
               </ul>
           </li>
           <li>
+            <a href="#plan-amendments" class="toc-h1 toc-link" data-title="Plan Amendments">Plan Amendments</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#plan-amendment-statuses" class="toc-h2 toc-link" data-title="Plan amendment statuses">Plan amendment statuses</a>
+                  </li>
+                  <li>
+                    <a href="#preview-a-plan-amendment" class="toc-h2 toc-link" data-title="Preview a plan amendment">Preview a plan amendment</a>
+                  </li>
+                  <li>
+                    <a href="#get-a-plan-amendment" class="toc-h2 toc-link" data-title="Get a plan amendment">Get a plan amendment</a>
+                  </li>
+                  <li>
+                    <a href="#send-a-plan-amendment" class="toc-h2 toc-link" data-title="Send a plan amendment">Send a plan amendment</a>
+                  </li>
+                  <li>
+                    <a href="#confirm-a-plan-amendment" class="toc-h2 toc-link" data-title="Confirm a plan amendment">Confirm a plan amendment</a>
+                  </li>
+                  <li>
+                    <a href="#cancel-a-plan-amendment" class="toc-h2 toc-link" data-title="Cancel a plan amendment">Cancel a plan amendment</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#payments" class="toc-h1 toc-link" data-title="Payments">Payments</a>
               <ul class="toc-list-h2">
                   <li>
@@ -472,6 +495,9 @@
                   </li>
                   <li>
                     <a href="#installment_rescheduled-event" class="toc-h2 toc-link" data-title="installment_rescheduled event">installment_rescheduled event</a>
+                  </li>
+                  <li>
+                    <a href="#plan_amended-event" class="toc-h2 toc-link" data-title="plan_amended event">plan_amended event</a>
                   </li>
                   <li>
                     <a href="#checkout_plan-deleted-event" class="toc-h2 toc-link" data-title="checkout_plan-deleted event">checkout_plan-deleted event</a>
@@ -3456,6 +3482,497 @@ but all personally identifiable customer information will be anonymized. If the 
 <p><code>DELETE /line_item/:id</code></p>
 
 <p><em>replace :id with the id of the line item to delete</em></p>
+<h1 id='plan-amendments'>Plan Amendments</h1>
+<p>Plan amendments let you add, edit and remove line items on payment plans that are already open, for example to upsell a customer an additional product or service, or to remove an item they no longer want.</p>
+
+<p>Amending a plan is a two step process:</p>
+
+<ol>
+<li><a href="#preview-a-plan-amendment">Preview the amendment</a> with the line item changes you want to make. This creates a <code>pending</code> plan amendment showing the plan&#39;s new totals, the remaining installments with their new amounts, and the contract for the customer to sign. Nothing on the payment plan changes yet.</li>
+<li>Get the customer&#39;s agreement, either by <a href="#send-a-plan-amendment">sending them the amendment</a> to review, sign and accept themselves, or by <a href="#confirm-a-plan-amendment">confirming the amendment</a> with their signature collected in your own UI. Once confirmed, the plan&#39;s line items and totals are updated and a new payment schedule replaces the current one.</li>
+</ol>
+
+<p>The remaining installments keep their scheduled dates, and the plan&#39;s new balance is spread across them. Amendments never add a new down payment.</p>
+
+<p>Amendments that increase the plan&#39;s total must be signed by the customer. Amendments that don&#39;t increase the total, such as a discount or a removed item, can be confirmed without a new signature, unless you set <code>require_signature</code> when previewing.</p>
+
+<p>A preview is calculated against the payment plan as it is at that moment. If the plan changes before the amendment is confirmed (an installment is charged, a payment or refund is made, another amendment is confirmed, a line item is edited), the amendment can no longer be confirmed and you&#39;ll receive a <code>409</code> response. Preview a new amendment in that case so the customer never agrees to one set of amounts and gets charged another.</p>
+
+<p>Pending amendments expire 14 days after being previewed by default.</p>
+<h2 id='plan-amendment-statuses'>Plan amendment statuses</h2>
+<table><thead>
+<tr>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pending</td>
+<td>previewed and waiting to be confirmed</td>
+</tr>
+<tr>
+<td>confirmed</td>
+<td>applied to the payment plan</td>
+</tr>
+<tr>
+<td>canceled</td>
+<td>canceled by you, or declined by the customer</td>
+</tr>
+<tr>
+<td>expired</td>
+<td>not confirmed before its <code>expires_at</code> date</td>
+</tr>
+</tbody></table>
+<h2 id='preview-a-plan-amendment'>Preview a plan amendment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/plan_amendment"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  --data <span class="s1">'{"payment_plan_id": "2ab17c1a-860d-4575-be11-dcd5bbab467d", "line_items": [{"action": "add", "description": "Photo package", "amount": 300.0, "quantity": 1}]}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/plan_amendment'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span><span class="p">,</span>
+    <span class="na">Accept</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">json</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">payment_plan_id</span><span class="p">:</span> <span class="s1">'2ab17c1a-860d-4575-be11-dcd5bbab467d'</span><span class="p">,</span>
+    <span class="na">line_items</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">action</span><span class="p">:</span> <span class="s1">'add'</span><span class="p">,</span>
+        <span class="na">description</span><span class="p">:</span> <span class="s1">'Photo package'</span><span class="p">,</span>
+        <span class="na">amount</span><span class="p">:</span> <span class="mf">300.0</span><span class="p">,</span>
+        <span class="na">quantity</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"plan_amendment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2ab17c1a-860d-4575-be11-dcd5bbab467d"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"require_signature"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"requires_customer_signature"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"add"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"attrs"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photo package"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="s2">"before"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"after"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photo package"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2faa91f1-7b01-4111-9af9-967e70c272e8"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wedding photography"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photo package"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"total"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"dynamic"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"dynamic_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"generic"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"image"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-15T00:00:00Z"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-12-15T00:00:00Z"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2027-01-15T00:00:00Z"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2027-02-15T00:00:00Z"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"previous_subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"previous_balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">800.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">1100.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_schedule_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_body"</span><span class="p">:</span><span class="w"> </span><span class="s2">"By accepting this amendment to your payment plan, you agree to..."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"expires_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-05T15:24:23Z"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"confirmed_at"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"canceled_at"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-22T15:24:23"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2ab17c1a-860d-4575-be11-dcd5bbab467d"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">1042</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e3cbf1dc-0c11-483f-b604-d44fd93aac90"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"merchant_notes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ip_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"user_agent"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-09-15T17:20:46.711165"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Validates a set of line item changes against an open payment plan and creates a <code>pending</code> plan amendment previewing the result. The payment plan isn&#39;t changed until the amendment is <a href="#confirm-a-plan-amendment">confirmed</a>.</p>
+
+<p>Each entry in <code>line_items</code> is a change with an <code>action</code> of <code>add</code>, <code>update</code> or <code>remove</code>:</p>
+
+<ul>
+<li><code>add</code> creates a new line item, using the line item fields below</li>
+<li><code>update</code> changes an existing line item on the plan. Give its <code>id</code> and only the fields you want to change, for example <code>{&quot;action&quot;: &quot;update&quot;, &quot;id&quot;: &quot;2faa91f1-7b01-4111-9af9-967e70c272e8&quot;, &quot;quantity&quot;: 2}</code></li>
+<li><code>remove</code> deletes an existing line item from the plan. Give only its <code>id</code>, for example <code>{&quot;action&quot;: &quot;remove&quot;, &quot;id&quot;: &quot;2faa91f1-7b01-4111-9af9-967e70c272e8&quot;}</code></li>
+</ul>
+
+<p>Line item amounts can be negative, for example to give the customer a discount.</p>
+
+<aside class="notice">
+Tax is not recalculated when a plan is amended. If the items you're adding or changing are taxable, add or update a tax line item (with <code>dynamic</code> set to true and <code>dynamic_type</code> set to "tax") in the same amendment.
+</aside>
+
+<p>The response contains the pending <code>plan_amendment</code> and the <code>payment_plan</code> it applies to. The amendment&#39;s <code>line_items</code> are the plan&#39;s line items as they&#39;ll be after the amendment, and <code>installments</code> are the plan&#39;s remaining installments with their new <code>amount</code> and their <code>previous_amount</code>. Use <code>contract_body</code> to show the customer the updated contract, and <code>requires_customer_signature</code> to know whether you&#39;ll need their signature to confirm it.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST /plan_amendment</code></p>
+<h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payment_plan_id</td>
+<td>string</td>
+<td>yes</td>
+<td>id of the open payment plan to amend</td>
+</tr>
+<tr>
+<td>line_items</td>
+<td>array</td>
+<td>yes</td>
+<td>list of line item changes, see below</td>
+</tr>
+<tr>
+<td>expires_at</td>
+<td>string</td>
+<td>no</td>
+<td>ISO 8601 date and time the amendment can be confirmed until. Defaults to 14 days from now</td>
+</tr>
+<tr>
+<td>require_signature</td>
+<td>boolean</td>
+<td>no</td>
+<td>require the customer&#39;s signature to confirm, even if the amendment doesn&#39;t increase the plan total. Defaults to false</td>
+</tr>
+<tr>
+<td>meta</td>
+<td>object</td>
+<td>no</td>
+<td>additional meta information about the amendment, for your own use</td>
+</tr>
+</tbody></table>
+<h3 id='line-item-change-parameters'>Line item change parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>action</td>
+<td>string</td>
+<td>yes</td>
+<td>&quot;add&quot;, &quot;update&quot; or &quot;remove&quot;</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>update and remove</td>
+<td>id of the line item on the plan to update or remove</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>add</td>
+<td>the line item&#39;s description</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>decimal</td>
+<td>add</td>
+<td>the unit price of the line item, in the plan&#39;s currency. May be positive or negative</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>integer</td>
+<td>no</td>
+<td>the quantity of the line item. Defaults to 1 if not specified</td>
+</tr>
+<tr>
+<td>image</td>
+<td>string</td>
+<td>no</td>
+<td>URL to an image for the line item</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>decimal</td>
+<td>no</td>
+<td>weight of the line item</td>
+</tr>
+<tr>
+<td>weight_units</td>
+<td>string</td>
+<td>no</td>
+<td>g, kg, oz, or lb. defaults to lb</td>
+</tr>
+<tr>
+<td>dynamic</td>
+<td>boolean</td>
+<td>no</td>
+<td>true for line items such as tax or shipping</td>
+</tr>
+<tr>
+<td>dynamic_type</td>
+<td>string</td>
+<td>no</td>
+<td>type of dynamic line item, ex. &quot;tax&quot; or &quot;shipping&quot;</td>
+</tr>
+<tr>
+<td>meta</td>
+<td>object</td>
+<td>no</td>
+<td>additional meta information about the line item</td>
+</tr>
+<tr>
+<td>integration</td>
+<td>string</td>
+<td>no</td>
+<td>third party service to send line item to, ex. &quot;shopify&quot; or &quot;bigcommerce&quot;</td>
+</tr>
+<tr>
+<td>integration_id</td>
+<td>string</td>
+<td>no</td>
+<td>line item id for third party service</td>
+</tr>
+</tbody></table>
+<h2 id='get-a-plan-amendment'>Get a plan amendment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span><span class="p">,</span>
+    <span class="na">Accept</span><span class="p">:</span> <span class="s1">'application/json'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like the preview a plan amendment response</p>
+</blockquote>
+
+<p>Retrieves a plan amendment and the payment plan it applies to.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET /plan_amendment/:id</code></p>
+
+<p><em>replace :id with the id of the plan amendment</em></p>
+<h2 id='send-a-plan-amendment'>Send a plan amendment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/send"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  -X POST
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/send'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span><span class="p">,</span>
+    <span class="na">Accept</span><span class="p">:</span> <span class="s1">'application/json'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like the preview a plan amendment response</p>
+</blockquote>
+
+<p>Emails the customer a link to review the changes to their payment plan and the updated contract, where they can sign and accept the amendment, or decline it. Accepting confirms the amendment, and declining cancels it. Only pending amendments can be sent.</p>
+
+<p>This is the simplest way to get a customer&#39;s signature on an amendment that increases their plan total.</p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>POST /plan_amendment/:id/send</code></p>
+
+<p><em>replace :id with the id of the plan amendment to send</em></p>
+<h2 id='confirm-a-plan-amendment'>Confirm a plan amendment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/confirm"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  --data <span class="s1">'{"contract_signature": "Customer Signature"}'</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/confirm'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span><span class="p">,</span>
+    <span class="na">Accept</span><span class="p">:</span> <span class="s1">'application/json'</span><span class="p">,</span>
+    <span class="s1">'Content-Type'</span><span class="p">:</span> <span class="s1">'application/json'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+  <span class="na">json</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">contract_signature</span><span class="p">:</span> <span class="s1">'Customer Signature'</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like the preview a plan amendment response, with the amendment&#39;s status &quot;confirmed&quot; and the payment plan&#39;s updated totals</p>
+</blockquote>
+
+<p>Confirms a pending plan amendment and applies it to the payment plan. The plan&#39;s line items and totals are updated, a new signed payment schedule with the amended installments replaces the plan&#39;s current schedule, and a <a href="#plan_amended-event">plan_amended</a> webhook event is sent.</p>
+
+<p>If the amendment&#39;s <code>requires_customer_signature</code> is true, you must include the customer&#39;s <code>contract_signature</code>, collected after showing them the amendment&#39;s <code>contract_body</code>. Otherwise you can leave it out, and the signature on the plan&#39;s current payment schedule is used.</p>
+
+<p>If the payment plan has changed since the amendment was previewed, a <code>409</code> response is returned and you should <a href="#preview-a-plan-amendment">preview</a> a new amendment.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>POST /plan_amendment/:id/confirm</code></p>
+
+<p><em>replace :id with the id of the plan amendment to confirm</em></p>
+<h3 id='parameters-2'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>contract_signature</td>
+<td>string</td>
+<td>no</td>
+<td>the customer&#39;s signature. Required if the amendment&#39;s <code>requires_customer_signature</code> is true</td>
+</tr>
+</tbody></table>
+<h2 id='cancel-a-plan-amendment'>Cancel a plan amendment</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/cancel"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Bearer your_api_key"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  -X POST
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="c1">// examples use the request library</span>
+<span class="c1">// https://github.com/request/request</span>
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">url</span><span class="p">:</span> <span class="s1">'https://partial.ly/api/plan_amendment/b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c/cancel'</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">Authorization</span><span class="p">:</span> <span class="s1">'Bearer your_api_key'</span><span class="p">,</span>
+    <span class="na">Accept</span><span class="p">:</span> <span class="s1">'application/json'</span>
+  <span class="p">},</span>
+  <span class="na">method</span><span class="p">:</span> <span class="s1">'POST'</span>
+<span class="p">};</span>
+
+<span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// asynchronous callback function</span>
+<span class="p">});</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like the preview a plan amendment response, with the amendment&#39;s status &quot;canceled&quot;</p>
+</blockquote>
+
+<p>Cancels a pending plan amendment so it can no longer be confirmed. The payment plan isn&#39;t changed. Only pending amendments can be canceled.</p>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>POST /plan_amendment/:id/cancel</code></p>
+
+<p><em>replace :id with the id of the plan amendment to cancel</em></p>
 <h1 id='payments'>Payments</h1>
 <p>Payments can have a <em>paid</em>, <em>pending</em>, or <em>failed</em> status. Payments made with a bank account payment method
 will be pending for up to 5 business days while we wait for them to be confirmed.</p>
@@ -4908,7 +5425,7 @@ Can&#39;t be done for open or paid status plans.</p>
     </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>Creates a new webhook listener. Events that can be subscribed to are <a href="#plan_opened-event">plan_opened</a>, <a href="#plan_paid-event">plan_paid</a>, <a href="#plan_defaulted-event">plan_defaulted</a>, <a href="#plan_canceled-event">plan_canceled</a>, <a href="#payment_succeeded-event">payment_succeeded</a>, <a href="#payment_failed-event">payment_failed</a>, <a href="#refund_created-event">refund_created</a>, <a href="#dispute_created-event">dispute_created</a>, <a href="#dispute_closed-event">dispute_closed</a>, <a href="#installment_rescheduled-event">installment_rescheduled</a>, <a href="#checkout_abandoned-event">checkout_abandoned</a>, and <a href="#checkout_plan_deleted-event">checkout_plan_deleted</a>.</p>
+<p>Creates a new webhook listener. Events that can be subscribed to are <a href="#plan_opened-event">plan_opened</a>, <a href="#plan_paid-event">plan_paid</a>, <a href="#plan_defaulted-event">plan_defaulted</a>, <a href="#plan_canceled-event">plan_canceled</a>, <a href="#payment_succeeded-event">payment_succeeded</a>, <a href="#payment_failed-event">payment_failed</a>, <a href="#refund_created-event">refund_created</a>, <a href="#dispute_created-event">dispute_created</a>, <a href="#dispute_closed-event">dispute_closed</a>, <a href="#installment_rescheduled-event">installment_rescheduled</a>, <a href="#plan_amended-event">plan_amended</a>, <a href="#checkout_abandoned-event">checkout_abandoned</a>, and <a href="#checkout_plan_deleted-event">checkout_plan_deleted</a>.</p>
 <h3 id='http-request'>HTTP request</h3>
 <p><code>POST /webhook</code></p>
 <h3 id='parameters'>Parameters</h3>
@@ -6195,6 +6712,94 @@ Can&#39;t be done for open or paid status plans.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Sent when a customer reschedules an installment</p>
+<h2 id='plan_amended-event'>plan_amended event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2ab17c1a-860d-4575-be11-dcd5bbab467d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"number"</span><span class="p">:</span><span class="w"> </span><span class="mi">1042</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount_paid"</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e3cbf1dc-0c11-483f-b604-d44fd93aac90"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"integration_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"inserted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-09-15T17:20:46.711165"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e3cbf1dc-0c11-483f-b604-d44fd93aac90"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jdoe@gmail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"payment_schedule"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5c1d7e2f-3a4b-4c5d-8e9f-0a1b2c3d4e5f"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">1100.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"num_payments"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"down_payment_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"auto_process"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"contract_signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"installments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9d8c7b6a-5f4e-4d3c-2b1a-0f9e8d7c6b5a"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"scheduled"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">275.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"scheduled"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-11-15T00:00:00Z"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"retry_number"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"line_items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2faa91f1-7b01-4111-9af9-967e70c272e8"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wedding photography"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photo package"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"plan_amendment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"b8f3c2a1-5d4e-4f6a-9b7c-1e2d3f4a5b6c"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"payment_plan_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2ab17c1a-860d-4575-be11-dcd5bbab467d"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"confirmed"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"previous_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">1300.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"previous_balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">800.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"balance"</span><span class="p">:</span><span class="w"> </span><span class="mf">1100.0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USD"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"add"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"before"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"after"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7e6d5c4b-3a2f-4e1d-9c8b-7a6f5e4d3c2b"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Photo package"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">300.0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"quantity"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"payment_schedule_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5c1d7e2f-3a4b-4c5d-8e9f-0a1b2c3d4e5f"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"confirmed_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-23T14:02:11Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"plan_amended"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Sent when a <a href="#plan-amendments">plan amendment</a> is confirmed and the payment plan&#39;s line items, totals and payment schedule have been updated. <code>payment_plan</code> contains the amended plan with its new payment schedule and line items, and <code>plan_amendment</code> contains the confirmed amendment, including the line item <code>changes</code> that were made.</p>
 <h2 id='checkout_plan-deleted-event'>checkout_plan-deleted event</h2><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"payment_plan"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
